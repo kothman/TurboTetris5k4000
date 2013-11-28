@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.swing.JFrame;
+import java.swing.JPanel;
 
 public class Grid extends JFrame {
 
@@ -10,6 +11,8 @@ public class Grid extends JFrame {
 	*/
 	public Grid() {
 		shapes = new ArrayList<Shape>();
+		this.setDefaultCloseOperation("EXIT_ON_CLOSE");
+		super()
 	}
 
 	/**
