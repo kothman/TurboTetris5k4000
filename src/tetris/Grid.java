@@ -1,11 +1,12 @@
 import java.util.ArrayList;
+import java.swing.JFrame;
 
-public class Grid {
+public class Grid extends JFrame {
 
 	ArrayList<Shape> shapes;
 
 	/**
-	*	Creates a grid to hold shapes/
+	*	Creates an empty grid to hold shapes.
 	*/
 	public Grid() {
 		shapes = new ArrayList<Shape>();
