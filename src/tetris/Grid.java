@@ -3,18 +3,25 @@ package tetris;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 @SuppressWarnings("serial")
 public class Grid extends JFrame {
-	private Cell[][] cells;
-	private enum shapeType {LINE, L, FLIPL, Z, FLIPZ, SQUARE, PLUSTHING};
-	private shapeType activeShape;
-	private ArrayList<ActiveCell> activeCells;
+	Cell[][] cells;
+	enum shapeType {LINE, L, FLIPL, Z, FLIPZ, SQUARE, PLUSTHING};
+	enum direction {LEFT, RIGHT};
+	shapeType currentShape;
+	shapeType nextShape;
+	ArrayList<ActiveCell> activeCells;
 	static final byte NUM_OF_ROWS = 20, NUM_OF_COLS = 10;
 	
 	JPanel mainPanel, gridPanel, nextPanel;
@@ -49,12 +56,6 @@ public class Grid extends JFrame {
 			}
 		}
 		
-		/*cells[15][9].setColor(Cell.color.PURPLE);
-		cells[15][8].setColor(Cell.color.PURPLE);
-		cells[15][7].setColor(Cell.color.PURPLE);
-		cells[14][8].setColor(Cell.color.PURPLE);*/
-		
-		spawnPlusThing();
 		
 		mainPanel = new JPanel();
 		mainPanel.setLayout(null);
@@ -87,6 +88,11 @@ public class Grid extends JFrame {
 		this.setTitle("Turbo Tetris 5k4000");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		this.setNextShape();
+		this.spawn();
+		this.tock();
+		this.setKeystrokes();
+		
 		//add Panels
 		mainPanel.add(gridPanel);
 		this.add(mainPanel);
@@ -99,27 +105,28 @@ public class Grid extends JFrame {
 	//Called after current cells are placed down. If returns false, game over
 	public boolean spawn(){
 		//pick a random spawn!!!
-		int r = (int)(Math.random()*7);
-		switch(r){
-			case 0:
+		currentShape = nextShape;
+		setNextShape();
+		switch(currentShape){
+			case LINE:
 				spawnLine();
 				break;
-			case 1:
+			case L:
 				spawnL();
 				break;
-			case 2:
+			case FLIPL:
 				spawnFlipL();
 				break;
-			case 3:
+			case Z:
 				spawnZ();
 				break;
-			case 4:
+			case FLIPZ:
 				spawnFlipZ();
 				break;
-			case 5:
+			case SQUARE:
 				spawnSquare();
 				break;
-			case 6:
+			case PLUSTHING:
 				spawnPlusThing();
 				break;
 			default:
@@ -128,22 +135,61 @@ public class Grid extends JFrame {
 		return true;
 	}
 	private boolean spawnLine(){
-		
+		Cell.color c = Cell.color.YELLOW;
+		activeCells.clear();
+		activeCells.add(new ActiveCell(4,0,c));
+		activeCells.add(new ActiveCell(4,1,c));
+		activeCells.add(new ActiveCell(4,2,c));
+		activeCells.add(new ActiveCell(4,3,c));
+
 		return true;
 	}
 	private boolean spawnL(){
+		Cell.color c = Cell.color.PINK;
+		activeCells.clear();
+		activeCells.add(new ActiveCell(4,0,c));
+		activeCells.add(new ActiveCell(4,1,c));
+		activeCells.add(new ActiveCell(4,2,c));
+		activeCells.add(new ActiveCell(5,2,c));
+
 		return true;
 	}
 	private boolean spawnFlipL(){
+		Cell.color c = Cell.color.BLUE;
+		activeCells.clear();
+		activeCells.add(new ActiveCell(5,0,c));
+		activeCells.add(new ActiveCell(5,1,c));
+		activeCells.add(new ActiveCell(5,2,c));
+		activeCells.add(new ActiveCell(4,2,c));
+
 		return true;
 	}
 	private boolean spawnZ(){
+		Cell.color c = Cell.color.RED;
+		activeCells.clear();
+		activeCells.add(new ActiveCell(3,0,c));
+		activeCells.add(new ActiveCell(4,0,c));
+		activeCells.add(new ActiveCell(4,1,c));
+		activeCells.add(new ActiveCell(5,1,c));
 		return true;
 	}
 	private boolean spawnFlipZ(){
+		Cell.color c = Cell.color.ORANGE;
+		activeCells.clear();
+		activeCells.add(new ActiveCell(5,0,c));
+		activeCells.add(new ActiveCell(6,0,c));
+		activeCells.add(new ActiveCell(5,1,c));
+		activeCells.add(new ActiveCell(4,1,c));
 		return true;
 	}
 	private boolean spawnSquare(){
+		Cell.color c = Cell.color.GREEN;
+		activeCells.clear();
+		activeCells.add(new ActiveCell(4,0,c));
+		activeCells.add(new ActiveCell(5,0,c));
+		activeCells.add(new ActiveCell(4,1,c));
+		activeCells.add(new ActiveCell(5,1,c));
+
 		return true;
 	}
 	private boolean spawnPlusThing(){
@@ -157,10 +203,65 @@ public class Grid extends JFrame {
 		return true;
 	}
 	
+	private void setNextShape(){
+		int i = (int)(Math.random()*7);
+		switch(i){
+			case 0:
+				nextShape = shapeType.LINE;
+				break;
+			case 1:
+				nextShape = shapeType.L;
+				break;
+			case 2:
+				nextShape = shapeType.SQUARE;
+				break;
+			case 3:
+				nextShape = shapeType.FLIPL;
+				break;
+			case 4:
+				nextShape = shapeType.FLIPZ;
+				break;
+			case 5:
+				nextShape = shapeType.PLUSTHING;
+				break;
+			case 6:
+				nextShape = shapeType.Z;
+				break;
+			default:
+				break;
+		}
+	}
+	
 	public boolean rotate(){
-		
+		switch(currentShape){
+			case LINE:
+				rotateLine();
+				break;
+			case L:
+				rotateL();
+				break;
+			case FLIPL:
+				rotateFlipL();
+				break;
+			case Z:
+				rotateZ();
+				break;
+			case FLIPZ:
+				rotateFlipZ();
+				break;
+			case SQUARE:
+				rotateSquare();
+				break;
+			case PLUSTHING:
+				rotatePlusThing();
+				break;
+			default:
+				break;
+			
+		}
 		return true;
 	}
+	//check for shape-specific collisions
 	private boolean rotateLine(){
 		return true;
 	}
@@ -187,9 +288,91 @@ public class Grid extends JFrame {
 		
 	}
 	
+
+	
+	boolean canMoveDown(ActiveCell c){
+		if(c.row >= 19 ||
+				cells[c.row+1][c.col].occupied)
+			return false;
+		return true;
+	}
+	
+	//checks to see if any lines should be removed, should call clearLine if needed
+	void checkLineRemoval(){
+		
+	}
+	
 	//check for collisions, logic, etc etc
+	//Should use ScheduledExecutorService to be the hearbeat
 	public void tock(){
+		//check for collision
+		boolean canMoveDown = true;
+		for(ActiveCell c : activeCells){
+			if(!canMoveDown(c)){
+				canMoveDown = false;
+			}
+		}
+		
+		//move cells down
+		if(canMoveDown){
+			for(ActiveCell c : activeCells){
+				c.moveDown();
+			}
+		} else {
+			transposeActiveCells();
+			spawn();
+		}
+		mainPanel.repaint();
 
 	}
+	
+	void transposeActiveCells(){
+		for(ActiveCell c: activeCells){
+			cells[c.row][c.col].setOccupied(true);
+			cells[c.row][c.col].setColor(c.currentColor);
+		}
+	}
+	
+	private void setKeystrokes(){
+		mainPanel.getInputMap().put(KeyStroke.getKeyStroke("DOWN"), "down");
+		mainPanel.getInputMap().put(KeyStroke.getKeyStroke("LEFT"), "moveLeft");
+		mainPanel.getInputMap().put(KeyStroke.getKeyStroke("RIGHT"), "moveRight");
+		mainPanel.getInputMap().put(KeyStroke.getKeyStroke("UP"), "rotate");
+
+		Action downAction = new AbstractAction(){
+			public void actionPerformed(ActionEvent e) {
+				tock();
+			}
+		};
+		Action leftAction = new AbstractAction(){
+			public void actionPerformed(ActionEvent e) {
+				for(ActiveCell c : activeCells){
+					c.moveLeft();
+				}
+				mainPanel.repaint();
+			}
+		};
+		Action rightAction = new AbstractAction(){
+			public void actionPerformed(ActionEvent e) {
+				for(ActiveCell c : activeCells){
+					c.moveRight();
+				}
+				mainPanel.repaint();
+			}
+		};
+		Action rotateAction = new AbstractAction(){
+			public void actionPerformed(ActionEvent e) {
+				//do rotate stuff
+			}
+		};
+		
+		
+		mainPanel.getActionMap().put("down", downAction);
+		mainPanel.getActionMap().put("moveLeft",leftAction);
+		mainPanel.getActionMap().put("moveRight",rightAction);
+		
+		
+	}
+
 
 }

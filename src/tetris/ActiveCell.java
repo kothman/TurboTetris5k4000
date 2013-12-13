@@ -12,7 +12,13 @@ public class ActiveCell extends Cell {
 		this.currentColor = c;
 	}
 	void moveDown(){
-		row--;
+		row++;
+	}
+	void moveLeft(){
+		col--;
+	}
+	void moveRight(){
+		col++;
 	}
 	public void paintComponent(Graphics g){
 		g.setColor(Color.WHITE);

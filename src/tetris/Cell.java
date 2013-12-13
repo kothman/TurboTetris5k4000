@@ -3,7 +3,7 @@ package tetris;
 import java.awt.Color;
 
 public class Cell{
-	public static enum color {BLACK, RED, YELLOW, GREEN, PURPLE, ORANGE, PINK};
+	public static enum color {BLACK, RED, YELLOW, GREEN, PURPLE, ORANGE, PINK, BLUE};
 	public color currentColor;
 	public boolean occupied;
 	
@@ -38,6 +38,8 @@ public class Cell{
 				return Color.ORANGE;
 			case PINK:
 				return Color.PINK;
+			case BLUE:
+				return Color.BLUE;
 			default:
 				return Color.BLACK;
 		}
