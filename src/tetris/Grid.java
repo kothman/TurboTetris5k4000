@@ -88,7 +88,6 @@ public class Grid extends JFrame {
 		
 		this.setNextShape();
 		this.spawn();
-		this.tock();
 		this.setKeystrokes();
 		
 		//add Panels
