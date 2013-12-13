@@ -4,12 +4,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
@@ -296,6 +294,20 @@ public class Grid extends JFrame {
 			return false;
 		return true;
 	}
+	boolean canMoveLeft(ActiveCell c){
+		if(c.col <= 0 ||
+				cells[c.row][c.col-1].occupied){
+			return false;
+		}
+		return true;
+	}
+	boolean canMoveRight(ActiveCell c){
+		if(c.col >=9 ||
+				cells[c.row][c.col+1].occupied){
+			return false;
+		}
+		return true;
+	}
 	
 	//checks to see if any lines should be removed, should call clearLine if needed
 	void checkLineRemoval(){
@@ -346,16 +358,31 @@ public class Grid extends JFrame {
 		};
 		Action leftAction = new AbstractAction(){
 			public void actionPerformed(ActionEvent e) {
+				boolean canMoveLeft = true;
 				for(ActiveCell c : activeCells){
-					c.moveLeft();
+					if(!canMoveLeft(c))
+						canMoveLeft = false;
+				}
+				if(canMoveLeft){
+					for(ActiveCell c : activeCells){
+						c.moveLeft();
+					}
 				}
 				mainPanel.repaint();
 			}
 		};
 		Action rightAction = new AbstractAction(){
 			public void actionPerformed(ActionEvent e) {
+				boolean canMoveRight = true;
 				for(ActiveCell c : activeCells){
-					c.moveRight();
+					if(!canMoveRight(c)){
+						canMoveRight = false;
+					}
+				}
+				if(canMoveRight){
+					for(ActiveCell c : activeCells){
+						c.moveRight();
+					}
 				}
 				mainPanel.repaint();
 			}
