@@ -14,16 +14,15 @@ public class Grid extends JFrame {
 	private Cell[][] cells;
 	private enum shapeType {LINE, L, FLIPL, Z, FLIPZ, SQUARE, PLUSTHING};
 	private shapeType activeShape;
-	private ArrayList<Cell> activeCells;
-	private final byte NUM_OF_ROWS;
-	private final byte NUM_OF_COLS;
+	private ArrayList<ActiveCell> activeCells;
+	static final byte NUM_OF_ROWS = 20, NUM_OF_COLS = 10;
 	
-	JPanel mainPanel, cellPanel, nextPanel;
+	JPanel mainPanel, gridPanel, nextPanel;
 	
 	//mainPanel finals
-	int WIDTH, HEIGHT;
+	static int WIDTH, HEIGHT;
 	//cellPanel finals
-	int CELL_PANEL_WIDTH, CELL_PANEL_HEIGHT, OFFSET;
+	static int CELL_PANEL_WIDTH, CELL_PANEL_HEIGHT, OFFSET;
 
 	/**
 	*	Creates an empty grid to hold shapes.
@@ -32,8 +31,11 @@ public class Grid extends JFrame {
 		//should call super first
 		super();
 		
+		//init vars
+		activeCells = new ArrayList<ActiveCell>();
+		
 		//constants
-		NUM_OF_ROWS = 20; NUM_OF_COLS = 10;
+		//NUM_OF_ROWS = 20; NUM_OF_COLS = 10;
 		WIDTH = 500; HEIGHT = 600;
 		CELL_PANEL_WIDTH = WIDTH - 200; CELL_PANEL_HEIGHT = HEIGHT-100; OFFSET = 10;
 		
@@ -47,10 +49,18 @@ public class Grid extends JFrame {
 			}
 		}
 		
+		/*cells[15][9].setColor(Cell.color.PURPLE);
+		cells[15][8].setColor(Cell.color.PURPLE);
+		cells[15][7].setColor(Cell.color.PURPLE);
+		cells[14][8].setColor(Cell.color.PURPLE);*/
+		
+		spawnPlusThing();
+		
 		mainPanel = new JPanel();
 		mainPanel.setLayout(null);
 		mainPanel.setBackground(Color.WHITE);
-		cellPanel = new JPanel(){
+		//stuff for the grid
+		gridPanel = new JPanel(){
 			public void paintComponent(Graphics g){
 				//draw border
 				g.setColor(Color.BLACK);
@@ -61,13 +71,15 @@ public class Grid extends JFrame {
 						g.setColor(Color.WHITE);
 						g.drawRect(col*(CELL_PANEL_WIDTH/NUM_OF_COLS), row*(CELL_PANEL_HEIGHT/NUM_OF_ROWS), CELL_PANEL_WIDTH/NUM_OF_COLS, CELL_PANEL_HEIGHT/NUM_OF_ROWS);
 						g.setColor(cells[row][col].getColor());
-						g.fillRect(col*(CELL_PANEL_WIDTH/NUM_OF_COLS) + 1, row*(CELL_PANEL_HEIGHT/NUM_OF_ROWS) + 1, CELL_PANEL_WIDTH/NUM_OF_COLS - 2, CELL_PANEL_HEIGHT/NUM_OF_ROWS - 2);
+						g.fillRect(col*(CELL_PANEL_WIDTH/NUM_OF_COLS) + 2, row*(CELL_PANEL_HEIGHT/NUM_OF_ROWS) + 2, CELL_PANEL_WIDTH/NUM_OF_COLS - 3, CELL_PANEL_HEIGHT/NUM_OF_ROWS - 3);
 					}
+				}
+				for(ActiveCell a:activeCells){
+					a.paintComponent(g);
 				}
 			}
 		};
-		cellPanel.setBackground(Color.BLACK);
-		cellPanel.setBounds(OFFSET, OFFSET, CELL_PANEL_WIDTH, CELL_PANEL_HEIGHT);
+		gridPanel.setBounds(OFFSET, OFFSET, CELL_PANEL_WIDTH, CELL_PANEL_HEIGHT);
 		
 		this.setSize(new Dimension(WIDTH,HEIGHT));
 		this.setLocationRelativeTo(null);
@@ -76,20 +88,47 @@ public class Grid extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//add Panels
-		mainPanel.add(cellPanel);
+		mainPanel.add(gridPanel);
 		this.add(mainPanel);
 		repaint();
-		cellPanel.repaint();
+		gridPanel.repaint();
 		this.setVisible(true);
 		
 	}
 	
 	//Called after current cells are placed down. If returns false, game over
 	public boolean spawn(){
-		
+		//pick a random spawn!!!
+		int r = (int)(Math.random()*7);
+		switch(r){
+			case 0:
+				spawnLine();
+				break;
+			case 1:
+				spawnL();
+				break;
+			case 2:
+				spawnFlipL();
+				break;
+			case 3:
+				spawnZ();
+				break;
+			case 4:
+				spawnFlipZ();
+				break;
+			case 5:
+				spawnSquare();
+				break;
+			case 6:
+				spawnPlusThing();
+				break;
+			default:
+				break;
+		}
 		return true;
 	}
 	private boolean spawnLine(){
+		
 		return true;
 	}
 	private boolean spawnL(){
@@ -108,6 +147,13 @@ public class Grid extends JFrame {
 		return true;
 	}
 	private boolean spawnPlusThing(){
+		Cell.color c = Cell.color.PURPLE;
+		activeCells.clear();
+		activeCells.add(new ActiveCell(4,0,c));
+		activeCells.add(new ActiveCell(3,1,c));
+		activeCells.add(new ActiveCell(4,1,c));
+		activeCells.add(new ActiveCell(5,1,c));
+		
 		return true;
 	}
 	
