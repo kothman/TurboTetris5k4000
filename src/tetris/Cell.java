@@ -7,22 +7,22 @@ public class Cell{
 	public color currentColor;
 	public boolean occupied;
 	
-	Cell(){
+	public Cell(){
 		
 	}
 	
-	void setOccupied(boolean b){
+	public void setOccupied(boolean b){
 		occupied = b;
 		if(!occupied){
 			setColor(color.BLACK);
 		}
 	}
 	
-	void setColor(color c){
+	public void setColor(color c){
 		currentColor = c;
 	}
 	
-	Color getColor(){
+	public Color getColor(){
 		switch(currentColor){
 			case BLACK:
 				return Color.BLACK;
