@@ -3,6 +3,7 @@ package tetris;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
@@ -153,7 +154,9 @@ public class Grid extends JFrame {
 		activeCells.add(new ActiveCell(4,1,c));
 		activeCells.add(new ActiveCell(4,2,c));
 		activeCells.add(new ActiveCell(4,3,c));
-
+		
+		activeCells.get(2).isPivot = true;
+		
 		return true;
 	}
 	private boolean spawnL(){
@@ -163,7 +166,9 @@ public class Grid extends JFrame {
 		activeCells.add(new ActiveCell(4,1,c));
 		activeCells.add(new ActiveCell(4,2,c));
 		activeCells.add(new ActiveCell(5,2,c));
-
+		
+		activeCells.get(2).isPivot = true;
+		
 		return true;
 	}
 	private boolean spawnFlipL(){
@@ -174,6 +179,8 @@ public class Grid extends JFrame {
 		activeCells.add(new ActiveCell(5,2,c));
 		activeCells.add(new ActiveCell(4,2,c));
 
+		activeCells.get(2).isPivot = true;
+		
 		return true;
 	}
 	private boolean spawnZ(){
@@ -275,13 +282,10 @@ public class Grid extends JFrame {
 	}
 	//check for shape-specific collisions
 	private boolean rotateLine(){
+		ActiveCell pivotCell = getPivotCell();
 		for(ActiveCell c: activeCells){
-			int oldCol = c.col;
-			int oldRow = c.row;
-			int newCol = 1 - (oldRow - (2/*length*/ - 2));
-			int newRow = oldCol;
-			c.col = newCol;
-			c.row = newRow;
+			int col, row;
+			
 		}
 		return true;
 	}
@@ -302,6 +306,15 @@ public class Grid extends JFrame {
 	}
 	private boolean rotatePlusThing(){
 		return true;
+	}
+	
+	private ActiveCell getPivotCell(){
+		for(ActiveCell c : activeCells){
+			if(c.isPivot){
+				return c;
+			}
+		}
+		return null;
 	}
 	
 	protected void clearLine(int line){
