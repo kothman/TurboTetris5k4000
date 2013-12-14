@@ -6,7 +6,6 @@
     <li>Important:</li>
     <ul>
       <li>Add rotation mechanisms</li>
-      <li>Implement ScheduledExecutorService to give Grid.tock() a heartbeat</li>
       <li>Implement checkLines() && clearLine(int i)</li>
     </ul>
     <li>Not as important:</li>
