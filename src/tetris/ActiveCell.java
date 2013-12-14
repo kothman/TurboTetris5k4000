@@ -5,6 +5,8 @@ import java.awt.Graphics;
 
 public class ActiveCell extends Cell {
 	int col, row;
+	boolean isPivot;
+	
 	ActiveCell(final int col, final int row,Cell.color c){
 		super();
 		this.col = col; this.row = row;

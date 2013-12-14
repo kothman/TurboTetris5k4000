@@ -5,6 +5,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -23,6 +26,8 @@ public class Grid extends JFrame {
 	static final byte NUM_OF_ROWS = 20, NUM_OF_COLS = 10;
 	
 	JPanel mainPanel, gridPanel, nextPanel;
+	ScheduledExecutorService ses;
+	
 	
 	//mainPanel finals
 	static int WIDTH, HEIGHT;
@@ -80,6 +85,7 @@ public class Grid extends JFrame {
 		};
 		gridPanel.setBounds(OFFSET, OFFSET, CELL_PANEL_WIDTH, CELL_PANEL_HEIGHT);
 		
+		/********************** Customize the JFrame **************/
 		this.setSize(new Dimension(WIDTH,HEIGHT));
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
@@ -96,6 +102,15 @@ public class Grid extends JFrame {
 		repaint();
 		gridPanel.repaint();
 		this.setVisible(true);
+		
+		//We should git tock a life here. ScheduledExecutorService
+		ses = Executors.newSingleThreadScheduledExecutor();
+		ses.scheduleAtFixedRate(new Runnable(){
+			@Override
+			public void run() {
+				tock();
+				
+			} }, 3, 1, TimeUnit.SECONDS);
 		
 	}
 	
@@ -260,6 +275,14 @@ public class Grid extends JFrame {
 	}
 	//check for shape-specific collisions
 	private boolean rotateLine(){
+		for(ActiveCell c: activeCells){
+			int oldCol = c.col;
+			int oldRow = c.row;
+			int newCol = 1 - (oldRow - (2/*length*/ - 2));
+			int newRow = oldCol;
+			c.col = newCol;
+			c.row = newRow;
+		}
 		return true;
 	}
 	private boolean rotateL(){
@@ -388,7 +411,8 @@ public class Grid extends JFrame {
 		};
 		Action rotateAction = new AbstractAction(){
 			public void actionPerformed(ActionEvent e) {
-				//do rotate stuff
+				rotate();
+				repaint();
 			}
 		};
 		
@@ -396,7 +420,7 @@ public class Grid extends JFrame {
 		mainPanel.getActionMap().put("down", downAction);
 		mainPanel.getActionMap().put("moveLeft",leftAction);
 		mainPanel.getActionMap().put("moveRight",rightAction);
-		
+		mainPanel.getActionMap().put("rotate", rotateAction);
 		
 	}
 
