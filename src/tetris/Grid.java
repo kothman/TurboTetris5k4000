@@ -238,8 +238,10 @@ public class Grid extends JFrame {
 			case 5:
 				nextShape = shapeType.PLUSTHING;
 				break;
-			default:
+			case 6:
 				nextShape = shapeType.Z;
+				break;
+			default:
 				break;
 		}
 	}
