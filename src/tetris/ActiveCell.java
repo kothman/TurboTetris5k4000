@@ -32,4 +32,8 @@ public class ActiveCell extends Cell {
 		g.setColor(currentColor);
 		g.fillRect(col*(Grid.CELL_PANEL_WIDTH/Grid.NUM_OF_COLS) + 2, row*(Grid.CELL_PANEL_HEIGHT/Grid.NUM_OF_ROWS) + 2, Grid.CELL_PANEL_WIDTH/Grid.NUM_OF_COLS - 3, Grid.CELL_PANEL_HEIGHT/Grid.NUM_OF_ROWS - 3);
 	}
+	
+	public String toString() {
+		return ("["+col+", "+row+"]");
+	}
 }
