@@ -3,7 +3,6 @@ package tetris;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
@@ -20,14 +19,13 @@ import javax.swing.KeyStroke;
 public class Grid extends JFrame {
 	private Cell[][] cells;
 	private enum shapeType {LINE, L, FLIPL, Z, FLIPZ, SQUARE, PLUSTHING};
-	private enum direction {LEFT, RIGHT};
 	private shapeType currentShape;
 	private shapeType nextShape;
 	private ArrayList<ActiveCell> activeCells;
 	public static final byte NUM_OF_ROWS = 20, NUM_OF_COLS = 10;
-	private static int score;
+	private int score;
 	
-	private JPanel mainPanel, gridPanel, nextPanel;
+	private JPanel mainPanel, gridPanel;
 	private ScheduledExecutorService ses;
 	
 	//mainPanel finals
