@@ -17,22 +17,23 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 public class Grid extends JFrame {
-	Cell[][] cells;
-	enum shapeType {LINE, L, FLIPL, Z, FLIPZ, SQUARE, PLUSTHING};
-	enum direction {LEFT, RIGHT};
-	shapeType currentShape;
-	shapeType nextShape;
-	ArrayList<ActiveCell> activeCells;
-	static final byte NUM_OF_ROWS = 20, NUM_OF_COLS = 10;
+	private Cell[][] cells;
+	private enum shapeType {LINE, L, FLIPL, Z, FLIPZ, SQUARE, PLUSTHING};
+	private enum direction {LEFT, RIGHT};
+	private shapeType currentShape;
+	private shapeType nextShape;
+	private ArrayList<ActiveCell> activeCells;
+	public static final byte NUM_OF_ROWS = 20, NUM_OF_COLS = 10;
 	
-	JPanel mainPanel, gridPanel, nextPanel;
-	ScheduledExecutorService ses;
-	
+	private JPanel mainPanel, gridPanel, nextPanel;
+	private ScheduledExecutorService ses;
 	
 	//mainPanel finals
-	static final int WIDTH = 500, HEIGHT = 600;
+	private static final int WIDTH = 500, HEIGHT = 600;
 	//cellPanel finals
-	static final int CELL_PANEL_WIDTH = WIDTH-200, CELL_PANEL_HEIGHT = HEIGHT-100, OFFSET = 10;
+	public static final int CELL_PANEL_WIDTH = WIDTH-200, CELL_PANEL_HEIGHT = HEIGHT-100, OFFSET = 10;
+	
+	private static boolean isTockable = true;
 
 	/**
 	*	Creates an empty grid to hold shapes.
@@ -81,19 +82,19 @@ public class Grid extends JFrame {
 		gridPanel.setBounds(OFFSET, OFFSET, CELL_PANEL_WIDTH, CELL_PANEL_HEIGHT);
 		
 		/********************** Customize the JFrame **************/
-		this.setSize(new Dimension(WIDTH,HEIGHT));
-		this.setLocationRelativeTo(null);
-		this.setResizable(false);
-		this.setTitle("Turbo Tetris 5k4000");
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(new Dimension(WIDTH,HEIGHT));
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setTitle("Turbo Tetris 5k4000");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		this.setNextShape();
-		this.spawn();
-		this.setKeystrokes();
+		setNextShape();
+		spawn();
+		setKeystrokes();
 		
 		//add Panels
 		mainPanel.add(gridPanel);
-		this.add(mainPanel);
+		add(mainPanel);
 		repaint();
 		gridPanel.repaint();
 		this.setVisible(true);
@@ -265,22 +266,22 @@ public class Grid extends JFrame {
 		
 	}
 	
-
-	
-	boolean canMoveDown(ActiveCell c){
+	protected boolean canMoveDown(ActiveCell c){
 		if(c.row >= 19 ||
 				cells[c.row+1][c.col].occupied)
 			return false;
 		return true;
 	}
-	boolean canMoveLeft(ActiveCell c){
+	
+	protected boolean canMoveLeft(ActiveCell c){
 		if(c.col <= 0 ||
 				cells[c.row][c.col-1].occupied){
 			return false;
 		}
 		return true;
 	}
-	boolean canMoveRight(ActiveCell c){
+	
+	protected boolean canMoveRight(ActiveCell c){
 		if(c.col >=9 ||
 				cells[c.row][c.col+1].occupied){
 			return false;
