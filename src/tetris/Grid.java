@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+@SuppressWarnings("serial")
 public class Grid extends JFrame {
 	private Cell[][] cells;
 	private enum shapeType {LINE, L, FLIPL, Z, FLIPZ, SQUARE, PLUSTHING};
@@ -33,7 +34,7 @@ public class Grid extends JFrame {
 	//cellPanel finals
 	public static final int CELL_PANEL_WIDTH = WIDTH-200, CELL_PANEL_HEIGHT = HEIGHT-100, OFFSET = 10;
 	
-	private static boolean isTockable = true;
+	private static final int[][] ROTATION_MATRIX = {{0,-1},{1, 0}};
 
 	/**
 	*	Creates an empty grid to hold shapes.
@@ -185,6 +186,9 @@ public class Grid extends JFrame {
 		activeCells.add(new ActiveCell(4,0,c));
 		activeCells.add(new ActiveCell(4,1,c));
 		activeCells.add(new ActiveCell(5,1,c));
+		
+		activeCells.get(2).isPivot = true;
+		
 		return true;
 	}
 	private boolean spawnFlipZ(){
@@ -194,6 +198,9 @@ public class Grid extends JFrame {
 		activeCells.add(new ActiveCell(6,0,c));
 		activeCells.add(new ActiveCell(5,1,c));
 		activeCells.add(new ActiveCell(4,1,c));
+		
+		activeCells.get(2).isPivot = true;
+		
 		return true;
 	}
 	private boolean spawnSquare(){
@@ -213,6 +220,8 @@ public class Grid extends JFrame {
 		activeCells.add(new ActiveCell(3,1,c));
 		activeCells.add(new ActiveCell(4,1,c));
 		activeCells.add(new ActiveCell(5,1,c));
+		
+		activeCells.get(2).isPivot = true;
 		
 		return true;
 	}
@@ -252,7 +261,14 @@ public class Grid extends JFrame {
 	
 	private boolean rotate(){
 		if(currentShape != shapeType.SQUARE){
-			//do stuff
+			//Gets a vector representation of an active cell, rotates around pivot, checks position, takes action
+			for (ActiveCell ac: activeCells) {
+				int[] acVector = {ac.col-getPivotCell().col, ac.row-getPivotCell().row};
+				int[] pacVector = {ROTATION_MATRIX[0][0]*acVector[0]+ROTATION_MATRIX[0][1]*acVector[1],
+								  ROTATION_MATRIX[1][0]*acVector[0]+ROTATION_MATRIX[1][1]*acVector[1]};
+				
+			}
+			
 		}
 		return true;
 	}
