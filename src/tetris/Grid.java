@@ -304,9 +304,15 @@ public class Grid extends JFrame {
 			}
 		}
 		
-		//checks for full lines
+		//checks for full lines, clears full lines
 		if (!canMoveDown) {
-			
+			for (int i = 0; i < NUM_OF_ROWS; i++) {
+				boolean isRowFull = true;
+				for (int j = 0; j < NUM_OF_COLS && isRowFull; j++) {
+					if (!cells[i][j].occupied) isRowFull = false;
+				}
+				if (isRowFull) clearLine(i);
+			}
 		}
 		
 		//move cells down
