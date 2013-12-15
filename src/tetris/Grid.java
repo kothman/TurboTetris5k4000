@@ -193,7 +193,6 @@ public class Grid extends JFrame {
 		Color c = Color.ORANGE;
 		activeCells.clear();
 		int[][] coords = {{5,0},{6,0},{5,1},{4,1}};
-		if (cells[5][0].occupied || cells[6][0].occupied || cells[5][1].occupied || cells[4][1].occupied) return false;
 		for (int[] coord : coords) {
 			if (cells[coord[0]][coord[1]].occupied) return false;
 			activeCells.add(new ActiveCell(coord[0], coord[1], c));
@@ -205,7 +204,6 @@ public class Grid extends JFrame {
 		Color c = Color.GREEN;
 		activeCells.clear();
 		int[][] coords = {{4,0},{5,0},{4,1},{5,1}};
-		if (cells[4][0].occupied || cells[5][0].occupied || cells[4][1].occupied || cells[5][1].occupied) return false;
 		for (int[] coord : coords) {
 			if (cells[coord[0]][coord[1]].occupied) return false;
 			activeCells.add(new ActiveCell(coord[0], coord[1], c));
@@ -214,7 +212,7 @@ public class Grid extends JFrame {
 		return true;
 	}
 	private boolean spawnPlusThing(){
-		Color c = new Color(1.0f, 0.0f, 1.0f);
+		Color c = new Color(0.5f, 0.0f, 1.0f);
 		activeCells.clear();
 		int[][] coords = {{4,0},{3,1},{4,1},{5,1}};
 		for (int[] coord : coords) {
@@ -265,22 +263,16 @@ public class Grid extends JFrame {
 			ArrayList<Integer[]> acVectors = new ArrayList<Integer[]>();
 			ArrayList<Integer[]> pacVectors = new ArrayList<Integer[]>();
 			ActiveCell pivotCell = getPivotCell();
-//			System.out.println("Pivot Cell: "+pivotCell);
 			for (int i = 0; i < activeCells.size() && isRotable; i++) {
 				Integer[] acVector = {activeCells.get(i).col-pivotCell.col, activeCells.get(i).row-pivotCell.row};
-//				System.out.println("Active Cell Vector: ["+acVector[0]+", "+acVector[1]+"]");
 				Integer[] pacVector = {ROTATION_MATRIX[0][0]*acVector[0]+ROTATION_MATRIX[0][1]*acVector[1],
 									   ROTATION_MATRIX[1][0]*acVector[0]+ROTATION_MATRIX[1][1]*acVector[1]};
-//				System.out.println("Potential AC Vector: ["+pacVector[0]+", "+pacVector[1]+"]");
 				acVectors.add(acVector);
 				pacVectors.add(pacVector);
-//				System.out.println("Cell Check Position: ["+(pivotCell.row+pacVector[1])+", "+(pivotCell.col+pacVector[0])+"]");
 				try {
 					isRotable = !cells[(pivotCell.row+pacVector[1])][(pivotCell.col+pacVector[0])].occupied;
-//					System.out.println(isRotable);
 				}
 				catch (ArrayIndexOutOfBoundsException e) {
-//					System.out.println("Out of bounds");
 					isRotable = false;
 				}
 			}
@@ -289,11 +281,9 @@ public class Grid extends JFrame {
 				for (int i = 0; i < activeCells.size(); i++) {
 					activeCells.get(i).col = pivotCell.col+pacVectors.get(i)[0];
 					activeCells.get(i).row = pivotCell.row+pacVectors.get(i)[1];
-//					System.out.println("Check passed");
 				}
 				return true;
 			}
-//			System.out.println("Check failed");
 		}
 		return false;
 	}
@@ -352,6 +342,7 @@ public class Grid extends JFrame {
 		}
 	}
 	
+	//Stop tocking, progressively fill up the grid with white blocks
 	private void endGame() {
 		ses.shutdown();
 		System.out.println("You lose");
@@ -394,6 +385,7 @@ public class Grid extends JFrame {
 
 	}
 	
+	//Takes active cells and puts them into cells[][]
 	void transposeActiveCells(){
 		for(ActiveCell c: activeCells){
 			cells[c.row][c.col].occupied = true;
@@ -401,6 +393,7 @@ public class Grid extends JFrame {
 		}
 	}
 	
+	//Sets all of the actions related to key pushes
 	private void setKeystrokes(){
 		mainPanel.getInputMap().put(KeyStroke.getKeyStroke("DOWN"), "down");
 		mainPanel.getInputMap().put(KeyStroke.getKeyStroke("LEFT"), "moveLeft");
