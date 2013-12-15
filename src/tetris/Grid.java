@@ -113,8 +113,11 @@ public class Grid extends JFrame {
 		
 	}
 	
+	/**
+	 * Spawns the next shape.  Returns false if there is no room left.
+	 */
 	//Called after current cells are placed down. If returns false, game over
-	public boolean spawn(){
+	private boolean spawn(){
 		//pick a random spawn!!!
 		currentShape = nextShape;
 		setNextShape();
@@ -144,7 +147,6 @@ public class Grid extends JFrame {
 			default:
 				break;
 		}
-//		System.out.println(success);
 		return success;
 	}
 	private boolean spawnLine(){
@@ -225,6 +227,7 @@ public class Grid extends JFrame {
 		return true;
 	}
 	
+	
 	private void setNextShape(){
 		int i = (int)(Math.random()*7);
 		switch(i){
@@ -299,6 +302,7 @@ public class Grid extends JFrame {
 		return null;
 	}
 	
+
 	private void clearLine(int line) {
 		for (int row = line; row > 0; row--) {
 			for (int col = 0; col < NUM_OF_COLS; col++) {
@@ -311,6 +315,7 @@ public class Grid extends JFrame {
 		score++;
 	}
 	
+
 	private boolean canMoveDown(ActiveCell c){
 		if(c.row >= 19 ||
 				cells[c.row+1][c.col].occupied)
@@ -335,6 +340,7 @@ public class Grid extends JFrame {
 	}
 	
 	//checks to see if any lines should be removed, should call clearLine if needed
+	
 	void checkLineRemoval(){
 		for (int row = 0; row < NUM_OF_ROWS; row++) {
 			boolean isRowFull = true;
@@ -346,6 +352,7 @@ public class Grid extends JFrame {
 	}
 	
 	//Stop tocking, progressively fill up the grid with white blocks
+
 	private void endGame() {
 		ses.shutdown();
 		System.out.println("You lose");
@@ -361,6 +368,11 @@ public class Grid extends JFrame {
 			}
 		}
 	}
+	
+	/**
+	 * Moves the active cells down or spawns more active cells, other logic, etc...
+	 * Could be considered a "turn"
+	 */
 	
 	//check for collisions, logic, etc etc
 	//Should use ScheduledExecutorService to be the hearbeat
@@ -389,6 +401,10 @@ public class Grid extends JFrame {
 	}
 	
 	//Takes active cells and puts them into cells[][]
+
+	/**
+	 * Places ActiveCells into cells[][].
+	 */
 	void transposeActiveCells(){
 		for(ActiveCell c: activeCells){
 			cells[c.row][c.col].occupied = true;
@@ -397,6 +413,7 @@ public class Grid extends JFrame {
 	}
 	
 	//Sets all of the actions related to key pushes
+
 	private void setKeystrokes(){
 		mainPanel.getInputMap().put(KeyStroke.getKeyStroke("DOWN"), "down");
 		mainPanel.getInputMap().put(KeyStroke.getKeyStroke("LEFT"), "moveLeft");
