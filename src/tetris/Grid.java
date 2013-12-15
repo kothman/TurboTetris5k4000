@@ -25,6 +25,7 @@ public class Grid extends JFrame {
 	private shapeType nextShape;
 	private ArrayList<ActiveCell> activeCells;
 	public static final byte NUM_OF_ROWS = 20, NUM_OF_COLS = 10;
+	private static int score;
 	
 	private JPanel mainPanel, gridPanel, nextPanel;
 	private ScheduledExecutorService ses;
@@ -45,6 +46,7 @@ public class Grid extends JFrame {
 		
 		//init vars
 		activeCells = new ArrayList<ActiveCell>();
+		score = 0;
 		
 		//populate cells
 		cells = new Cell[NUM_OF_ROWS][NUM_OF_COLS];
@@ -306,6 +308,7 @@ public class Grid extends JFrame {
 		for (int col = 0; col < NUM_OF_COLS; col++) {
 			cells[0][col] = new Cell();
 		}
+		score++;
 	}
 	
 	private boolean canMoveDown(ActiveCell c){
