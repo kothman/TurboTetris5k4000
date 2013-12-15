@@ -267,7 +267,14 @@ public class Grid extends JFrame {
 	}
 	
 	private void clearLine(int line){
-		System.out.println("Full line"); //debugging
+		for (int row = line; row > 0; row--) {
+			for (int col = 0; col < NUM_OF_COLS; col++) {
+				cells[row][col] = cells[row-1][col];
+			}
+		}
+		for (int col = 0; col < NUM_OF_COLS; col++) {
+			cells[0][col] = new Cell();
+		}
 	}
 	
 	private boolean canMoveDown(ActiveCell c){
@@ -314,8 +321,6 @@ public class Grid extends JFrame {
 				canMoveDown = false;
 			}
 		}
-		
-
 		
 		//move cells down, check logic
 		if(canMoveDown){

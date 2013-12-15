@@ -7,7 +7,8 @@ public class Cell{
 	public boolean occupied;
 	
 	public Cell(){
-		
+		currentColor = Color.BLACK;
+		occupied = false;
 	}
 	
 	public void setOccupied(boolean b){
