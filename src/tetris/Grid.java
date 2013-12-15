@@ -266,21 +266,22 @@ public class Grid extends JFrame {
 			ArrayList<Integer[]> acVectors = new ArrayList<Integer[]>();
 			ArrayList<Integer[]> pacVectors = new ArrayList<Integer[]>();
 			ActiveCell pivotCell = getPivotCell();
-//			System.out.println("Pivot Cell: "+pivotCell);
+			System.out.println("Pivot Cell: "+pivotCell);
 			for (int i = 0; i < activeCells.size(); i++) {
 				Integer[] acVector = {activeCells.get(i).col-pivotCell.col, activeCells.get(i).row-pivotCell.row};
-//				System.out.println("Active Cell Vector: ["+acVector[0]+", "+acVector[1]+"]");
+				System.out.println("Active Cell Vector: ["+acVector[0]+", "+acVector[1]+"]");
 				Integer[] pacVector = {ROTATION_MATRIX[0][0]*acVector[0]+ROTATION_MATRIX[0][1]*acVector[1],
 									   ROTATION_MATRIX[1][0]*acVector[0]+ROTATION_MATRIX[1][1]*acVector[1]};
-//				System.out.println("Potential AC Vector: ["+pacVector[0]+", "+pacVector[1]+"]");
+				System.out.println("Potential AC Vector: ["+pacVector[0]+", "+pacVector[1]+"]");
 				acVectors.add(acVector);
 				pacVectors.add(pacVector);
-//				System.out.println("Cell Check Position: ["+(pivotCell.col+pacVector[0])+", "+(pivotCell.row+pacVector[1])+"]");
+				System.out.println("Cell Check Position: ["+(pivotCell.row+pacVector[1])+", "+(pivotCell.col+pacVector[0])+"]");
 				try {
-					isRotable = !cells[(pivotCell.col+pacVector[0])][(pivotCell.row+pacVector[1])].occupied;
-//					System.out.println(isRotable);
+					isRotable = !cells[(pivotCell.row+pacVector[1])][(pivotCell.col+pacVector[0])].occupied;
+					System.out.println(isRotable);
 				}
 				catch (ArrayIndexOutOfBoundsException e) {
+					System.out.println("Out of bounds");
 					isRotable = false;
 				}
 			}
