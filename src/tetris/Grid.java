@@ -267,7 +267,7 @@ public class Grid extends JFrame {
 			ArrayList<Integer[]> pacVectors = new ArrayList<Integer[]>();
 			ActiveCell pivotCell = getPivotCell();
 			System.out.println("Pivot Cell: "+pivotCell);
-			for (int i = 0; i < activeCells.size(); i++) {
+			for (int i = 0; i < activeCells.size() && isRotable; i++) {
 				Integer[] acVector = {activeCells.get(i).col-pivotCell.col, activeCells.get(i).row-pivotCell.row};
 				System.out.println("Active Cell Vector: ["+acVector[0]+", "+acVector[1]+"]");
 				Integer[] pacVector = {ROTATION_MATRIX[0][0]*acVector[0]+ROTATION_MATRIX[0][1]*acVector[1],
@@ -308,7 +308,7 @@ public class Grid extends JFrame {
 		return null;
 	}
 	
-	private void clearLine(int line){
+	private void clearLine(int line) {
 		for (int row = line; row > 0; row--) {
 			for (int col = 0; col < NUM_OF_COLS; col++) {
 				cells[row][col] = cells[row-1][col];
@@ -344,12 +344,12 @@ public class Grid extends JFrame {
 	
 	//checks to see if any lines should be removed, should call clearLine if needed
 	void checkLineRemoval(){
-		for (int i = 0; i < NUM_OF_ROWS; i++) {
+		for (int row = 0; row < NUM_OF_ROWS; row++) {
 			boolean isRowFull = true;
-			for (int j = 0; j < NUM_OF_COLS && isRowFull; j++) {
-				if (!cells[i][j].occupied) isRowFull = false;
+			for (int col = 0; col < NUM_OF_COLS && isRowFull; col++) {
+				if (!cells[row][col].occupied) isRowFull = false;
 			}
-			if (isRowFull) clearLine(i);
+			if (isRowFull) clearLine(row);
 		}
 	}
 	
