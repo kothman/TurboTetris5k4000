@@ -246,59 +246,9 @@ public class Grid extends JFrame {
 	}
 	
 	public boolean rotate(){
-		switch(currentShape){
-			case LINE:
-				rotateLine();
-				break;
-			case L:
-				rotateL();
-				break;
-			case FLIPL:
-				rotateFlipL();
-				break;
-			case Z:
-				rotateZ();
-				break;
-			case FLIPZ:
-				rotateFlipZ();
-				break;
-			case SQUARE:
-				rotateSquare();
-				break;
-			case PLUSTHING:
-				rotatePlusThing();
-				break;
-			default:
-				break;
-			
+		if(currentShape != shapeType.SQUARE){
+			//do stuff
 		}
-		return true;
-	}
-	//check for shape-specific collisions
-	private boolean rotateLine(){
-		ActiveCell pivotCell = getPivotCell();
-		for(ActiveCell c: activeCells){
-			int col, row;
-			
-		}
-		return true;
-	}
-	private boolean rotateL(){
-		return true;
-	}
-	private boolean rotateFlipL(){
-		return true;
-	}
-	private boolean rotateZ(){
-		return true;
-	}
-	private boolean rotateFlipZ(){
-		return true;
-	}
-	private boolean rotateSquare(){
-		return true;
-	}
-	private boolean rotatePlusThing(){
 		return true;
 	}
 	
