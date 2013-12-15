@@ -218,7 +218,7 @@ public class Grid extends JFrame {
 	}
 	
 	private void setNextShape(){
-		int i = (int)(Math.random()*6);
+		int i = (int)(Math.random()*7);
 		switch(i){
 			case 0:
 				nextShape = shapeType.LINE;
