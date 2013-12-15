@@ -241,8 +241,12 @@ public class Grid extends JFrame {
 			case 6:
 				nextShape = shapeType.Z;
 				break;
-			default:
-				break;
+			default: //This should never happen. If it does, throw an error
+				try{
+					throw new UnreachableCode();
+				} catch (Exception e){
+					System.out.println(e);
+				}
 		}
 	}
 	
