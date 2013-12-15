@@ -261,16 +261,41 @@ public class Grid extends JFrame {
 	
 	private boolean rotate(){
 		if(currentShape != shapeType.SQUARE){
-			//Gets a vector representation of an active cell, rotates around pivot, checks position, takes action
-			for (ActiveCell ac: activeCells) {
-				int[] acVector = {ac.col-getPivotCell().col, ac.row-getPivotCell().row};
-				int[] pacVector = {ROTATION_MATRIX[0][0]*acVector[0]+ROTATION_MATRIX[0][1]*acVector[1],
-								  ROTATION_MATRIX[1][0]*acVector[0]+ROTATION_MATRIX[1][1]*acVector[1]};
-				
+			//Gets a vector representation of an active cell, rotates around pivot, checks position...
+			boolean isRotable = true;
+			ArrayList<Integer[]> acVectors = new ArrayList<Integer[]>();
+			ArrayList<Integer[]> pacVectors = new ArrayList<Integer[]>();
+			ActiveCell pivotCell = getPivotCell();
+			System.out.println("Pivot Cell: "+pivotCell);
+			for (int i = 0; i < activeCells.size(); i++) {
+				Integer[] acVector = {activeCells.get(i).col-pivotCell.col, activeCells.get(i).row-pivotCell.row};
+				System.out.println("Active Cell Vector: ["+acVector[0]+", "+acVector[1]+"]");
+				Integer[] pacVector = {ROTATION_MATRIX[0][0]*acVector[0]+ROTATION_MATRIX[0][1]*acVector[1],
+									   ROTATION_MATRIX[1][0]*acVector[0]+ROTATION_MATRIX[1][1]*acVector[1]};
+				System.out.println("Potential AC Vector: ["+pacVector[0]+", "+pacVector[1]+"]");
+				acVectors.add(acVector);
+				pacVectors.add(pacVector);
+				System.out.println("Cell Check Position: ["+(pivotCell.col+pacVector[0])+", "+(pivotCell.row+pacVector[1])+"]");
+				try {
+					isRotable = !cells[(pivotCell.col+pacVector[0])][(pivotCell.row+pacVector[1])].occupied;
+					System.out.println(isRotable);
+				}
+				catch (ArrayIndexOutOfBoundsException e) {
+					isRotable = false;
+				}
 			}
-			
+			//Rotates if none of the vectors failed the check
+			if (isRotable) {
+				for (int i = 0; i < activeCells.size(); i++) {
+					activeCells.get(i).col = pivotCell.col+pacVectors.get(i)[0];
+					activeCells.get(i).row = pivotCell.row+pacVectors.get(i)[1];
+					System.out.println("Check passed");
+				}
+				return true;
+			}
+			System.out.println("Check failed");
 		}
-		return true;
+		return false;
 	}
 	
 	private ActiveCell getPivotCell(){
