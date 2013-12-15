@@ -6,7 +6,8 @@
     <li>Important:</li>
     <ul>
       <li>Add rotation mechanisms</li>
-      <li>Implement checkLines() && clearLine(int i)</li>
+      <li>Implement clearLine(int i)</li>
+      <li>Implement losing</li>
     </ul>
     <li>Not as important:</li>
     <ul>
