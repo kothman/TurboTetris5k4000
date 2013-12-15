@@ -16,7 +16,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
-@SuppressWarnings("serial")
 public class Grid extends JFrame {
 	Cell[][] cells;
 	enum shapeType {LINE, L, FLIPL, Z, FLIPZ, SQUARE, PLUSTHING};
@@ -31,9 +30,9 @@ public class Grid extends JFrame {
 	
 	
 	//mainPanel finals
-	static int WIDTH, HEIGHT;
+	static final int WIDTH = 500, HEIGHT = 600;
 	//cellPanel finals
-	static int CELL_PANEL_WIDTH, CELL_PANEL_HEIGHT, OFFSET;
+	static final int CELL_PANEL_WIDTH = WIDTH-200, CELL_PANEL_HEIGHT = HEIGHT-100, OFFSET = 10;
 
 	/**
 	*	Creates an empty grid to hold shapes.
@@ -44,11 +43,6 @@ public class Grid extends JFrame {
 		
 		//init vars
 		activeCells = new ArrayList<ActiveCell>();
-		
-		//constants
-		//NUM_OF_ROWS = 20; NUM_OF_COLS = 10;
-		WIDTH = 500; HEIGHT = 600;
-		CELL_PANEL_WIDTH = WIDTH - 200; CELL_PANEL_HEIGHT = HEIGHT-100; OFFSET = 10;
 		
 		//populate cells
 		cells = new Cell[NUM_OF_ROWS][NUM_OF_COLS];
@@ -148,19 +142,19 @@ public class Grid extends JFrame {
 		return true;
 	}
 	private boolean spawnLine(){
-		Cell.color c = Cell.color.YELLOW;
+		Color c = Color.YELLOW;
 		activeCells.clear();
 		activeCells.add(new ActiveCell(4,0,c));
 		activeCells.add(new ActiveCell(4,1,c));
 		activeCells.add(new ActiveCell(4,2,c));
 		activeCells.add(new ActiveCell(4,3,c));
 		
-		activeCells.get(2).isPivot = true;
+		activeCells.get(2).isPivot = true; 
 		
 		return true;
 	}
 	private boolean spawnL(){
-		Cell.color c = Cell.color.PINK;
+		Color c = Color.PINK;
 		activeCells.clear();
 		activeCells.add(new ActiveCell(4,0,c));
 		activeCells.add(new ActiveCell(4,1,c));
@@ -172,7 +166,7 @@ public class Grid extends JFrame {
 		return true;
 	}
 	private boolean spawnFlipL(){
-		Cell.color c = Cell.color.BLUE;
+		Color c = Color.BLUE;
 		activeCells.clear();
 		activeCells.add(new ActiveCell(5,0,c));
 		activeCells.add(new ActiveCell(5,1,c));
@@ -184,7 +178,7 @@ public class Grid extends JFrame {
 		return true;
 	}
 	private boolean spawnZ(){
-		Cell.color c = Cell.color.RED;
+		Color c = Color.RED;
 		activeCells.clear();
 		activeCells.add(new ActiveCell(3,0,c));
 		activeCells.add(new ActiveCell(4,0,c));
@@ -193,7 +187,7 @@ public class Grid extends JFrame {
 		return true;
 	}
 	private boolean spawnFlipZ(){
-		Cell.color c = Cell.color.ORANGE;
+		Color c = Color.ORANGE;
 		activeCells.clear();
 		activeCells.add(new ActiveCell(5,0,c));
 		activeCells.add(new ActiveCell(6,0,c));
@@ -202,7 +196,7 @@ public class Grid extends JFrame {
 		return true;
 	}
 	private boolean spawnSquare(){
-		Cell.color c = Cell.color.GREEN;
+		Color c = Color.GREEN;
 		activeCells.clear();
 		activeCells.add(new ActiveCell(4,0,c));
 		activeCells.add(new ActiveCell(5,0,c));
@@ -212,7 +206,7 @@ public class Grid extends JFrame {
 		return true;
 	}
 	private boolean spawnPlusThing(){
-		Cell.color c = Cell.color.PURPLE;
+		Color c = new Color(1.0f, 0.0f, 1.0f);
 		activeCells.clear();
 		activeCells.add(new ActiveCell(4,0,c));
 		activeCells.add(new ActiveCell(3,1,c));
