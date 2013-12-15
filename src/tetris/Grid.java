@@ -116,113 +116,112 @@ public class Grid extends JFrame {
 		//pick a random spawn!!!
 		currentShape = nextShape;
 		setNextShape();
+		boolean success = true;
 		switch(currentShape){
 			case LINE:
-				spawnLine();
+				success = spawnLine();
 				break;
 			case L:
-				spawnL();
+				success = spawnL();
 				break;
 			case FLIPL:
-				spawnFlipL();
+				success = spawnFlipL();
 				break;
 			case Z:
-				spawnZ();
+				success = spawnZ();
 				break;
 			case FLIPZ:
-				spawnFlipZ();
+				success = spawnFlipZ();
 				break;
 			case SQUARE:
-				spawnSquare();
+				success = spawnSquare();
 				break;
 			case PLUSTHING:
-				spawnPlusThing();
+				success = spawnPlusThing();
 				break;
 			default:
 				break;
 		}
-		return true;
+//		System.out.println(success);
+		return success;
 	}
 	private boolean spawnLine(){
 		Color c = Color.YELLOW;
 		activeCells.clear();
-		activeCells.add(new ActiveCell(4,0,c));
-		activeCells.add(new ActiveCell(4,1,c));
-		activeCells.add(new ActiveCell(4,2,c));
-		activeCells.add(new ActiveCell(4,3,c));
-		
-		activeCells.get(2).isPivot = true; 
-		
+		int[][] coords = {{4,0},{4,1},{4,2},{4,3}};
+		for (int[] coord : coords) {
+			if (cells[coord[0]][coord[1]].occupied) return false;
+			activeCells.add(new ActiveCell(coord[0], coord[1], c));
+		}
+		activeCells.get(2).isPivot = true;
 		return true;
 	}
 	private boolean spawnL(){
 		Color c = Color.PINK;
 		activeCells.clear();
-		activeCells.add(new ActiveCell(4,0,c));
-		activeCells.add(new ActiveCell(4,1,c));
-		activeCells.add(new ActiveCell(4,2,c));
-		activeCells.add(new ActiveCell(5,2,c));
-		
+		int[][] coords = {{4,0},{4,1},{4,2},{5,2}};
+		for (int[] coord : coords) {
+			if (cells[coord[0]][coord[1]].occupied) return false;
+			activeCells.add(new ActiveCell(coord[0], coord[1], c));
+		}
 		activeCells.get(2).isPivot = true;
-		
 		return true;
 	}
 	private boolean spawnFlipL(){
 		Color c = Color.BLUE;
 		activeCells.clear();
-		activeCells.add(new ActiveCell(5,0,c));
-		activeCells.add(new ActiveCell(5,1,c));
-		activeCells.add(new ActiveCell(5,2,c));
-		activeCells.add(new ActiveCell(4,2,c));
-
+		int[][] coords = {{5,0},{5,1},{5,2},{4,2}};
+		for (int[] coord : coords) {
+			if (cells[coord[0]][coord[1]].occupied) return false;
+			activeCells.add(new ActiveCell(coord[0], coord[1], c));
+		}
 		activeCells.get(2).isPivot = true;
-		
 		return true;
 	}
 	private boolean spawnZ(){
 		Color c = Color.RED;
 		activeCells.clear();
-		activeCells.add(new ActiveCell(3,0,c));
-		activeCells.add(new ActiveCell(4,0,c));
-		activeCells.add(new ActiveCell(4,1,c));
-		activeCells.add(new ActiveCell(5,1,c));
-		
+		int[][] coords = {{3,0},{4,0},{4,1},{5,1}};
+		for (int[] coord : coords) {
+			if (cells[coord[0]][coord[1]].occupied) return false;
+			activeCells.add(new ActiveCell(coord[0], coord[1], c));
+		}
 		activeCells.get(2).isPivot = true;
-		
 		return true;
 	}
 	private boolean spawnFlipZ(){
 		Color c = Color.ORANGE;
 		activeCells.clear();
-		activeCells.add(new ActiveCell(5,0,c));
-		activeCells.add(new ActiveCell(6,0,c));
-		activeCells.add(new ActiveCell(5,1,c));
-		activeCells.add(new ActiveCell(4,1,c));
-		
+		int[][] coords = {{5,0},{6,0},{5,1},{4,1}};
+		if (cells[5][0].occupied || cells[6][0].occupied || cells[5][1].occupied || cells[4][1].occupied) return false;
+		for (int[] coord : coords) {
+			if (cells[coord[0]][coord[1]].occupied) return false;
+			activeCells.add(new ActiveCell(coord[0], coord[1], c));
+		}
 		activeCells.get(2).isPivot = true;
-		
 		return true;
 	}
 	private boolean spawnSquare(){
 		Color c = Color.GREEN;
 		activeCells.clear();
-		activeCells.add(new ActiveCell(4,0,c));
-		activeCells.add(new ActiveCell(5,0,c));
-		activeCells.add(new ActiveCell(4,1,c));
-		activeCells.add(new ActiveCell(5,1,c));
-
+		int[][] coords = {{4,0},{5,0},{4,1},{5,1}};
+		if (cells[4][0].occupied || cells[5][0].occupied || cells[4][1].occupied || cells[5][1].occupied) return false;
+		for (int[] coord : coords) {
+			if (cells[coord[0]][coord[1]].occupied) return false;
+			activeCells.add(new ActiveCell(coord[0], coord[1], c));
+		}
+		activeCells.get(2).isPivot = true;
 		return true;
 	}
 	private boolean spawnPlusThing(){
 		Color c = new Color(1.0f, 0.0f, 1.0f);
 		activeCells.clear();
-		activeCells.add(new ActiveCell(4,0,c));
-		activeCells.add(new ActiveCell(3,1,c));
-		activeCells.add(new ActiveCell(4,1,c));
-		activeCells.add(new ActiveCell(5,1,c));
-		
+		int[][] coords = {{4,0},{3,1},{4,1},{5,1}};
+		for (int[] coord : coords) {
+			if (cells[coord[0]][coord[1]].occupied) return false;
+			activeCells.add(new ActiveCell(coord[0], coord[1], c));
+		}
 		activeCells.get(2).isPivot = true;
-		
 		return true;
 	}
 	
@@ -266,22 +265,22 @@ public class Grid extends JFrame {
 			ArrayList<Integer[]> acVectors = new ArrayList<Integer[]>();
 			ArrayList<Integer[]> pacVectors = new ArrayList<Integer[]>();
 			ActiveCell pivotCell = getPivotCell();
-			System.out.println("Pivot Cell: "+pivotCell);
+//			System.out.println("Pivot Cell: "+pivotCell);
 			for (int i = 0; i < activeCells.size() && isRotable; i++) {
 				Integer[] acVector = {activeCells.get(i).col-pivotCell.col, activeCells.get(i).row-pivotCell.row};
-				System.out.println("Active Cell Vector: ["+acVector[0]+", "+acVector[1]+"]");
+//				System.out.println("Active Cell Vector: ["+acVector[0]+", "+acVector[1]+"]");
 				Integer[] pacVector = {ROTATION_MATRIX[0][0]*acVector[0]+ROTATION_MATRIX[0][1]*acVector[1],
 									   ROTATION_MATRIX[1][0]*acVector[0]+ROTATION_MATRIX[1][1]*acVector[1]};
-				System.out.println("Potential AC Vector: ["+pacVector[0]+", "+pacVector[1]+"]");
+//				System.out.println("Potential AC Vector: ["+pacVector[0]+", "+pacVector[1]+"]");
 				acVectors.add(acVector);
 				pacVectors.add(pacVector);
-				System.out.println("Cell Check Position: ["+(pivotCell.row+pacVector[1])+", "+(pivotCell.col+pacVector[0])+"]");
+//				System.out.println("Cell Check Position: ["+(pivotCell.row+pacVector[1])+", "+(pivotCell.col+pacVector[0])+"]");
 				try {
 					isRotable = !cells[(pivotCell.row+pacVector[1])][(pivotCell.col+pacVector[0])].occupied;
-					System.out.println(isRotable);
+//					System.out.println(isRotable);
 				}
 				catch (ArrayIndexOutOfBoundsException e) {
-					System.out.println("Out of bounds");
+//					System.out.println("Out of bounds");
 					isRotable = false;
 				}
 			}
@@ -290,11 +289,11 @@ public class Grid extends JFrame {
 				for (int i = 0; i < activeCells.size(); i++) {
 					activeCells.get(i).col = pivotCell.col+pacVectors.get(i)[0];
 					activeCells.get(i).row = pivotCell.row+pacVectors.get(i)[1];
-					System.out.println("Check passed");
+//					System.out.println("Check passed");
 				}
 				return true;
 			}
-			System.out.println("Check failed");
+//			System.out.println("Check failed");
 		}
 		return false;
 	}
@@ -353,6 +352,22 @@ public class Grid extends JFrame {
 		}
 	}
 	
+	private void endGame() {
+		ses.shutdown();
+		System.out.println("You lose");
+		for (int row = 19; row >= 0; row--) {
+			for (int col = 0; col < NUM_OF_COLS; col++) {
+				cells[row][col].currentColor = Color.WHITE;
+				gridPanel.repaint();
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	//check for collisions, logic, etc etc
 	//Should use ScheduledExecutorService to be the hearbeat
 	private void tock(){
@@ -372,7 +387,8 @@ public class Grid extends JFrame {
 		} else {
 			transposeActiveCells();
 			checkLineRemoval();
-			spawn();
+			if (!spawn())
+				endGame();
 		}
 		mainPanel.repaint();
 
@@ -380,8 +396,8 @@ public class Grid extends JFrame {
 	
 	void transposeActiveCells(){
 		for(ActiveCell c: activeCells){
-			cells[c.row][c.col].setOccupied(true);
-			cells[c.row][c.col].setColor(c.currentColor);
+			cells[c.row][c.col].occupied = true;
+			cells[c.row][c.col].currentColor = c.currentColor;
 		}
 	}
 	
