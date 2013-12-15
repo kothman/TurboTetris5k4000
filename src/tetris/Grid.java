@@ -354,6 +354,11 @@ public class Grid extends JFrame {
 			}
 		}
 		
+		//checks for full lines
+		if (!canMoveDown) {
+			
+		}
+		
 		//move cells down
 		if(canMoveDown){
 			for(ActiveCell c : activeCells){
