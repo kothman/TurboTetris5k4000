@@ -274,6 +274,7 @@ public class Grid extends JFrame {
 		}
 		for (int col = 0; col < NUM_OF_COLS; col++) {
 			cells[0][col] = new Cell();
+			cells[0][col].setColor(Color.BLACK);
 		}
 	}
 	
