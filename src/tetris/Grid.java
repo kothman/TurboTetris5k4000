@@ -429,7 +429,7 @@ public class Grid extends JFrame {
 		Action rotateAction = new AbstractAction(){
 			public void actionPerformed(ActionEvent e) {
 				rotate();
-				repaint();
+				gridPanel.repaint();
 			}
 		};
 		
