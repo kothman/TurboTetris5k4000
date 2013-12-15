@@ -97,9 +97,9 @@ public class Grid extends JFrame {
 		add(mainPanel);
 		repaint();
 		gridPanel.repaint();
-		this.setVisible(true);
+		setVisible(true);
 		
-		//We should git tock a life here. ScheduledExecutorService
+		//We should give tock a life here. ScheduledExecutorService
 		ses = Executors.newSingleThreadScheduledExecutor();
 		ses.scheduleAtFixedRate(new Runnable(){
 			@Override
@@ -263,7 +263,7 @@ public class Grid extends JFrame {
 	}
 	
 	private void clearLine(int line){
-		
+		System.out.println("Full line"); //debugging
 	}
 	
 	private boolean canMoveDown(ActiveCell c){
@@ -291,7 +291,13 @@ public class Grid extends JFrame {
 	
 	//checks to see if any lines should be removed, should call clearLine if needed
 	void checkLineRemoval(){
-		
+		for (int i = 0; i < NUM_OF_ROWS; i++) {
+			boolean isRowFull = true;
+			for (int j = 0; j < NUM_OF_COLS && isRowFull; j++) {
+				if (!cells[i][j].occupied) isRowFull = false;
+			}
+			if (isRowFull) clearLine(i);
+		}
 	}
 	
 	//check for collisions, logic, etc etc
@@ -305,24 +311,16 @@ public class Grid extends JFrame {
 			}
 		}
 		
-		//checks for full lines, clears full lines
-		if (!canMoveDown) {
-			for (int i = 0; i < NUM_OF_ROWS; i++) {
-				boolean isRowFull = true;
-				for (int j = 0; j < NUM_OF_COLS && isRowFull; j++) {
-					if (!cells[i][j].occupied) isRowFull = false;
-				}
-				if (isRowFull) clearLine(i);
-			}
-		}
+
 		
-		//move cells down
+		//move cells down, check logic
 		if(canMoveDown){
 			for(ActiveCell c : activeCells){
 				c.moveDown();
 			}
 		} else {
 			transposeActiveCells();
+			checkLineRemoval();
 			spawn();
 		}
 		mainPanel.repaint();
