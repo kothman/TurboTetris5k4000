@@ -218,7 +218,7 @@ public class Grid extends JFrame {
 	}
 	
 	private void setNextShape(){
-		int i = (int)(Math.random()*7);
+		int i = (int)(Math.random()*6);
 		switch(i){
 			case 0:
 				nextShape = shapeType.LINE;
@@ -238,15 +238,13 @@ public class Grid extends JFrame {
 			case 5:
 				nextShape = shapeType.PLUSTHING;
 				break;
-			case 6:
-				nextShape = shapeType.Z;
-				break;
 			default:
+				nextShape = shapeType.Z;
 				break;
 		}
 	}
 	
-	public boolean rotate(){
+	private boolean rotate(){
 		if(currentShape != shapeType.SQUARE){
 			//do stuff
 		}
@@ -262,18 +260,18 @@ public class Grid extends JFrame {
 		return null;
 	}
 	
-	protected void clearLine(int line){
+	private void clearLine(int line){
 		
 	}
 	
-	protected boolean canMoveDown(ActiveCell c){
+	private boolean canMoveDown(ActiveCell c){
 		if(c.row >= 19 ||
 				cells[c.row+1][c.col].occupied)
 			return false;
 		return true;
 	}
 	
-	protected boolean canMoveLeft(ActiveCell c){
+	private boolean canMoveLeft(ActiveCell c){
 		if(c.col <= 0 ||
 				cells[c.row][c.col-1].occupied){
 			return false;
@@ -281,7 +279,7 @@ public class Grid extends JFrame {
 		return true;
 	}
 	
-	protected boolean canMoveRight(ActiveCell c){
+	private boolean canMoveRight(ActiveCell c){
 		if(c.col >=9 ||
 				cells[c.row][c.col+1].occupied){
 			return false;
@@ -296,7 +294,7 @@ public class Grid extends JFrame {
 	
 	//check for collisions, logic, etc etc
 	//Should use ScheduledExecutorService to be the hearbeat
-	public void tock(){
+	private void tock(){
 		//check for collision
 		boolean canMoveDown = true;
 		for(ActiveCell c : activeCells){
