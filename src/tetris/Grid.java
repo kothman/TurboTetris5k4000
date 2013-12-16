@@ -85,10 +85,10 @@ public class Grid extends JFrame {
 			public void paintComponent(Graphics g) {
 				//Draw score
 				g.setColor(Color.BLACK);
-				g.drawString(String.valueOf(score), 0, 0);
+				g.drawString("ggggggggggggggggg", 0, 0);
 			}
 		};
-		scorePanel.setBounds(OFFSET, 2*OFFSET+CELL_PANEL_HEIGHT, CELL_PANEL_WIDTH, HEIGHT-CELL_PANEL_HEIGHT-3*OFFSET);
+		scorePanel.setBounds(OFFSET, 3*OFFSET+CELL_PANEL_HEIGHT, CELL_PANEL_WIDTH, HEIGHT-CELL_PANEL_HEIGHT-4*OFFSET);
 		
 		/********************** Customize the JFrame **************/
 		setSize(new Dimension(WIDTH,HEIGHT));
@@ -103,9 +103,11 @@ public class Grid extends JFrame {
 		
 		//add Panels
 		mainPanel.add(gridPanel);
+		mainPanel.add(scorePanel);
 		add(mainPanel);
 		repaint();
 		gridPanel.repaint();
+		scorePanel.repaint();
 		setVisible(true);
 		
 		//We should give tock a life here. ScheduledExecutorService
@@ -117,6 +119,7 @@ public class Grid extends JFrame {
 				
 			} }, 3, 1, TimeUnit.SECONDS);
 		
+		//Load all of the sounds
 		SoundEffect.init();
 	}
 	
@@ -320,7 +323,7 @@ public class Grid extends JFrame {
 			cells[0][col] = new Cell();
 		}
 		score++;
-		scorePanel.repaint();
+		mainPanel.repaint();
 	}
 	
 
@@ -362,11 +365,11 @@ public class Grid extends JFrame {
 	//Stop tocking, progressively fill up the grid with white blocks
 	private void endGame() {
 		ses.shutdown();
-		System.out.println("You lose");
+		activeCells.clear();
 		for (int row = 19; row >= 0; row--) {
 			for (int col = 0; col < NUM_OF_COLS; col++) {
 				cells[row][col].currentColor = Color.WHITE;
-				gridPanel.repaint();
+				mainPanel.repaint();
 				try {
 					Thread.sleep(20);
 				} catch (InterruptedException e) {
@@ -383,7 +386,7 @@ public class Grid extends JFrame {
 	
 	//check for collisions, logic, etc etc
 	//Should use ScheduledExecutorService to be the hearbeat
-	private void tock(){
+	private boolean tock(){
 		//check for collision
 		boolean canMoveDown = true;
 		for(ActiveCell c : activeCells){
@@ -400,11 +403,14 @@ public class Grid extends JFrame {
 		} else {
 			transposeActiveCells();
 			checkLineRemoval();
-			if (!spawn())
+			if (!spawn()) {
 				endGame();
+				return false;
+			}
 		}
 		mainPanel.repaint();
 		SoundEffect.TOCK.play();
+		return true;
 	}
 	
 	//Takes active cells and puts them into cells[][]
@@ -420,8 +426,7 @@ public class Grid extends JFrame {
 	}
 	
 	//Sets all of the actions related to key pushes
-
-	private void setKeystrokes(){
+	private void setKeystrokes() {
 		mainPanel.getInputMap().put(KeyStroke.getKeyStroke("DOWN"), "down");
 		mainPanel.getInputMap().put(KeyStroke.getKeyStroke("LEFT"), "moveLeft");
 		mainPanel.getInputMap().put(KeyStroke.getKeyStroke("RIGHT"), "moveRight");
@@ -469,14 +474,12 @@ public class Grid extends JFrame {
 				gridPanel.repaint();
 			}
 		};
-		
-		
+				
 		mainPanel.getActionMap().put("down", downAction);
 		mainPanel.getActionMap().put("moveLeft",leftAction);
 		mainPanel.getActionMap().put("moveRight",rightAction);
 		mainPanel.getActionMap().put("rotate", rotateAction);
 		
 	}
-
-
+	
 }
