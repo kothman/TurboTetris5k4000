@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class ActiveCell extends Cell {
-	int col, row;
-	boolean isPivot;
+	public int col, row;
+	public boolean isPivot;
 	
 	/**
 	 * Class constructor.
@@ -18,27 +18,6 @@ public class ActiveCell extends Cell {
 		this.col = col; this.row = row;
 		occupied=false;
 		this.currentColor = c;
-	}
-	
-	/**
-	 * Moves the cell down.
-	 */
-	public void moveDown(){
-		row++;
-	}
-	
-	/**
-	 * Moves the cell to the left.
-	 */
-	public void moveLeft(){
-		col--;
-	}
-	
-	/**
-	 * Moves the cell to the right.
-	 */
-	public void moveRight(){
-		col++;
 	}
 	
 	/**

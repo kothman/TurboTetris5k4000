@@ -67,7 +67,7 @@ public class Grid extends JFrame {
 		for(int row = 0; row < NUM_OF_ROWS; row++){
 			for(int col = 0; col < NUM_OF_COLS; col++){
 				Cell temp = new Cell();
-				temp.setOccupied(false);
+				temp.occupied = false;
 				cells[row][col] = temp;
 			}
 		}
@@ -87,7 +87,7 @@ public class Grid extends JFrame {
 					for(int row = 0; row < NUM_OF_ROWS; row++){
 						g.setColor(Color.WHITE);
 						g.drawRect(col*(CELL_PANEL_WIDTH/NUM_OF_COLS), row*(CELL_PANEL_HEIGHT/NUM_OF_ROWS), CELL_PANEL_WIDTH/NUM_OF_COLS, CELL_PANEL_HEIGHT/NUM_OF_ROWS);
-						g.setColor(cells[row][col].getColor());
+						g.setColor(cells[row][col].currentColor);
 						g.fillRect(col*(CELL_PANEL_WIDTH/NUM_OF_COLS) + 2, row*(CELL_PANEL_HEIGHT/NUM_OF_ROWS) + 2, CELL_PANEL_WIDTH/NUM_OF_COLS - 3, CELL_PANEL_HEIGHT/NUM_OF_ROWS - 3);
 					}
 				}
@@ -447,6 +447,11 @@ public class Grid extends JFrame {
 	private void endGame() {
 		ses.shutdown();
 		activeCells.clear();
+		for (int row = 0; row < NUM_OF_ROWS; row++) {
+			for (int col = 0; col < NUM_OF_COLS; col++) {
+				cells[row][col].occupied = true;
+			}
+		}
 		SoundEffect.END.play();
 		for (int row = 19; row >= 0; row--) {
 			for (int col = 0; col < NUM_OF_COLS; col++) {
@@ -480,7 +485,7 @@ public class Grid extends JFrame {
 		//move cells down, check logic
 		if(canMoveDown){
 			for(ActiveCell c : activeCells){
-				c.moveDown();
+				c.row++;
 			}
 		} else {
 			transposeActiveCells();
@@ -528,7 +533,7 @@ public class Grid extends JFrame {
 				}
 				if(canMoveLeft){
 					for(ActiveCell c : activeCells){
-						c.moveLeft();
+						c.col--;
 					}
 				}
 				mainPanel.repaint();
@@ -544,7 +549,7 @@ public class Grid extends JFrame {
 				}
 				if(canMoveRight){
 					for(ActiveCell c : activeCells){
-						c.moveRight();
+						c.col++;
 					}
 				}
 				mainPanel.repaint();
