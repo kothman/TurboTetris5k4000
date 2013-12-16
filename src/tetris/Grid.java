@@ -28,6 +28,8 @@ public class Grid extends JFrame {
 	private JPanel mainPanel, gridPanel, scorePanel, nextPanel;
 	private ScheduledExecutorService ses;
 	
+	private static float LEVEL_FACTOR = 0.9f;
+	
 	private int currentRate;
 	
 	//mainPanel finals
@@ -392,7 +394,7 @@ public class Grid extends JFrame {
 		if (score%10 == 0) {
 			ses.shutdown();
 			ses = Executors.newSingleThreadScheduledExecutor();
-			currentRate = (int) (currentRate*0.9);
+			currentRate = (int) (currentRate*LEVEL_FACTOR);
 			ses.scheduleAtFixedRate(new Runnable(){
 				@Override
 				public void run() {
