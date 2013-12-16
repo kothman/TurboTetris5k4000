@@ -157,6 +157,7 @@ public class Grid extends JFrame {
 		
 		//Load all of the sounds
 		SoundEffect.init();
+		SoundEffect.START.play();
 	}
 	
 	/**
@@ -362,6 +363,7 @@ public class Grid extends JFrame {
 					activeCells.get(i).col = pivotCell.col+pacVectors.get(i)[0];
 					activeCells.get(i).row = pivotCell.row+pacVectors.get(i)[1];
 				}
+				SoundEffect.TOCK.play();
 				return true;
 			}
 		}
@@ -387,6 +389,7 @@ public class Grid extends JFrame {
 			cells[0][col] = new Cell();
 		}
 		score++;
+		SoundEffect.LINE.play();
 		if (score%10 == 0) {
 			ses.shutdown();
 			ses = Executors.newSingleThreadScheduledExecutor();
@@ -398,6 +401,7 @@ public class Grid extends JFrame {
 				} 
 			}, 0, currentRate, TimeUnit.MILLISECONDS);
 			level++;
+			SoundEffect.LEVEL.play();
 		}
 		mainPanel.repaint();
 	}
@@ -442,6 +446,7 @@ public class Grid extends JFrame {
 	private void endGame() {
 		ses.shutdown();
 		activeCells.clear();
+		SoundEffect.END.play();
 		for (int row = 19; row >= 0; row--) {
 			for (int col = 0; col < NUM_OF_COLS; col++) {
 				cells[row][col].currentColor = Color.WHITE;
