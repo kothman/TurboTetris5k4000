@@ -27,6 +27,7 @@ public class Grid extends JFrame {
 	
 	private JPanel mainPanel, gridPanel, scorePanel, nextPanel;
 	private ScheduledExecutorService ses;
+	private Action downAction, leftAction, rightAction, rotateAction;
 	
 	private static float LEVEL_FACTOR = 0.9f;
 	
@@ -154,7 +155,6 @@ public class Grid extends JFrame {
 			@Override
 			public void run() {
 				tock();
-				
 			} }, 3000, currentRate, TimeUnit.MILLISECONDS);
 		
 		//Load all of the sounds
@@ -446,6 +446,7 @@ public class Grid extends JFrame {
 	//Stop tocking, progressively fill up the grid with white blocks
 	private void endGame() {
 		ses.shutdown();
+		
 		activeCells.clear();
 		for (int row = 0; row < NUM_OF_ROWS; row++) {
 			for (int col = 0; col < NUM_OF_COLS; col++) {
@@ -470,9 +471,6 @@ public class Grid extends JFrame {
 	 * Moves the active cells down or spawns more active cells, other logic, etc...
 	 * Could be considered a "turn"
 	 */
-	
-	//check for collisions, logic, etc etc
-	//Should use ScheduledExecutorService to be the hearbeat
 	private boolean tock(){
 		//check for collision
 		boolean canMoveDown = true;
@@ -498,8 +496,6 @@ public class Grid extends JFrame {
 		mainPanel.repaint();
 		return true;
 	}
-	
-	//Takes active cells and puts them into cells[][]
 
 	/**
 	 * Places ActiveCells into cells[][].
@@ -512,19 +508,21 @@ public class Grid extends JFrame {
 		activeCells.clear();
 	}
 	
-	//Sets all of the actions related to key pushes
+	/**
+	 * Sets key bindings.
+	 */
 	private void setKeystrokes() {
 		mainPanel.getInputMap().put(KeyStroke.getKeyStroke("DOWN"), "down");
 		mainPanel.getInputMap().put(KeyStroke.getKeyStroke("LEFT"), "moveLeft");
 		mainPanel.getInputMap().put(KeyStroke.getKeyStroke("RIGHT"), "moveRight");
 		mainPanel.getInputMap().put(KeyStroke.getKeyStroke("UP"), "rotate");
 
-		Action downAction = new AbstractAction(){
+		downAction = new AbstractAction(){
 			public void actionPerformed(ActionEvent e) {
 				tock();
 			}
 		};
-		Action leftAction = new AbstractAction(){
+		leftAction = new AbstractAction(){
 			public void actionPerformed(ActionEvent e) {
 				boolean canMoveLeft = true;
 				for(ActiveCell c : activeCells){
@@ -539,7 +537,7 @@ public class Grid extends JFrame {
 				mainPanel.repaint();
 			}
 		};
-		Action rightAction = new AbstractAction(){
+		rightAction = new AbstractAction(){
 			public void actionPerformed(ActionEvent e) {
 				boolean canMoveRight = true;
 				for(ActiveCell c : activeCells){
@@ -555,7 +553,7 @@ public class Grid extends JFrame {
 				mainPanel.repaint();
 			}
 		};
-		Action rotateAction = new AbstractAction(){
+		rotateAction = new AbstractAction(){
 			public void actionPerformed(ActionEvent e) {
 				rotate();
 				gridPanel.repaint();
