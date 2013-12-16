@@ -363,7 +363,6 @@ public class Grid extends JFrame {
 					activeCells.get(i).col = pivotCell.col+pacVectors.get(i)[0];
 					activeCells.get(i).row = pivotCell.row+pacVectors.get(i)[1];
 				}
-				SoundEffect.TOCK.play();
 				return true;
 			}
 		}
@@ -490,7 +489,6 @@ public class Grid extends JFrame {
 			}
 		}
 		mainPanel.repaint();
-		SoundEffect.TOCK.play();
 		return true;
 	}
 	

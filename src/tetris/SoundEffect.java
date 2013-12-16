@@ -8,8 +8,7 @@ public enum SoundEffect {
 	START("wav/start.wav"),
 	END("wav/end.wav"),
 	LINE("wav/line.wav"),
-	LEVEL("wav/level.wav"),
-	TOCK("wav/tock.wav");
+	LEVEL("wav/level.wav");
 	
 	private Clip clip;
 	
