@@ -29,9 +29,9 @@ public class Grid extends JFrame {
 	private ScheduledExecutorService ses;
 	
 	//mainPanel finals
-	private static final int WIDTH = 500, HEIGHT = 600;
+	private static final int WIDTH = 500, HEIGHT = 650;
 	//cellPanel finals
-	public static final int CELL_PANEL_WIDTH = WIDTH-200, CELL_PANEL_HEIGHT = HEIGHT-100, OFFSET = 10;
+	public static final int CELL_PANEL_WIDTH = 300, CELL_PANEL_HEIGHT = 600, OFFSET = 10;
 	
 	private static final int[][] ROTATION_MATRIX = {{0,-1},{1, 0}};
 
@@ -85,10 +85,10 @@ public class Grid extends JFrame {
 			public void paintComponent(Graphics g) {
 				//Draw score
 				g.setColor(Color.BLACK);
-				g.drawString("ggggggggggggggggg", 0, 0);
+				g.drawString("Score: "+String.valueOf(score), 0, 10);
 			}
 		};
-		scorePanel.setBounds(OFFSET, 3*OFFSET+CELL_PANEL_HEIGHT, CELL_PANEL_WIDTH, HEIGHT-CELL_PANEL_HEIGHT-4*OFFSET);
+		scorePanel.setBounds(2*OFFSET+CELL_PANEL_WIDTH, OFFSET, WIDTH-3*OFFSET-CELL_PANEL_WIDTH, 6*OFFSET);
 		
 		/********************** Customize the JFrame **************/
 		setSize(new Dimension(WIDTH,HEIGHT));
