@@ -23,10 +23,12 @@ public class Grid extends JFrame {
 	private shapeType nextShape;
 	private ArrayList<ActiveCell> activeCells, nextCells;
 	public static final byte NUM_OF_ROWS = 20, NUM_OF_COLS = 10;
-	private int score;
+	private int score, level;
 	
 	private JPanel mainPanel, gridPanel, scorePanel, nextPanel;
 	private ScheduledExecutorService ses;
+	
+	private int currentRate;
 	
 	//mainPanel finals
 	private static final int WIDTH = 500,
@@ -56,7 +58,7 @@ public class Grid extends JFrame {
 		//init vars
 		activeCells = new ArrayList<ActiveCell>();
 		nextCells = new ArrayList<ActiveCell>();
-		score = 0;
+		score = 0; currentRate = 1000;
 		
 		//populate cells
 		cells = new Cell[NUM_OF_ROWS][NUM_OF_COLS];
@@ -97,7 +99,7 @@ public class Grid extends JFrame {
 			public void paintComponent(Graphics g) {
 				//Draw score
 				g.setColor(Color.BLACK);
-				g.drawString("Score: "+String.valueOf(score), 0, 10);
+				g.drawString("Score: "+String.valueOf(score)+"  Level: "+String.valueOf(level), 0, 10);
 			}
 		};
 		scorePanel.setBounds(2*OFFSET+CELL_PANEL_WIDTH, OFFSET, WIDTH-3*OFFSET-CELL_PANEL_WIDTH, 2*OFFSET);
@@ -151,7 +153,7 @@ public class Grid extends JFrame {
 			public void run() {
 				tock();
 				
-			} }, 3, 1, TimeUnit.SECONDS);
+			} }, 3000, currentRate, TimeUnit.MILLISECONDS);
 		
 		//Load all of the sounds
 		SoundEffect.init();
@@ -306,10 +308,10 @@ public class Grid extends JFrame {
 				break;
 			case 4:
 				nextShape = shapeType.FLIPZ;
-				nextCells.add(new ActiveCell(0,1,Color.ORANGE));
-				nextCells.add(new ActiveCell(0,2,Color.ORANGE));
-				nextCells.add(new ActiveCell(1,1,Color.ORANGE));
 				nextCells.add(new ActiveCell(1,0,Color.ORANGE));
+				nextCells.add(new ActiveCell(2,0,Color.ORANGE));
+				nextCells.add(new ActiveCell(1,1,Color.ORANGE));
+				nextCells.add(new ActiveCell(0,1,Color.ORANGE));
 				break;
 			case 5:
 				nextShape = shapeType.PLUSTHING;
@@ -374,7 +376,6 @@ public class Grid extends JFrame {
 		}
 		return null;
 	}
-	
 
 	private void clearLine(int line) {
 		for (int row = line; row > 0; row--) {
@@ -386,6 +387,18 @@ public class Grid extends JFrame {
 			cells[0][col] = new Cell();
 		}
 		score++;
+		if (score%10 == 0) {
+			ses.shutdown();
+			ses = Executors.newSingleThreadScheduledExecutor();
+			currentRate = (int) (currentRate*0.9);
+			ses.scheduleAtFixedRate(new Runnable(){
+				@Override
+				public void run() {
+					tock();
+				} 
+			}, 0, currentRate, TimeUnit.MILLISECONDS);
+			level++;
+		}
 		mainPanel.repaint();
 	}
 	
