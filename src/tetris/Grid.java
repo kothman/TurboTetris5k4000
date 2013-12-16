@@ -36,9 +36,9 @@ public class Grid extends JFrame {
 	private static final int WIDTH = 500,
 							 HEIGHT = 650;
 	//cellPanel finals
-	public static final int CELL_PANEL_WIDTH = 300, 
+	public static final int OFFSET = 10,
 							CELL_PANEL_HEIGHT = 600,
-							OFFSET = 10;
+							CELL_PANEL_WIDTH = 300;
 	public static final int SCORE_PANEL_X = OFFSET*2+CELL_PANEL_WIDTH,
 							SCORE_PANEL_Y = OFFSET,
 							SCORE_PANEL_WIDTH = WIDTH-SCORE_PANEL_X-OFFSET,
@@ -504,6 +504,7 @@ public class Grid extends JFrame {
 			cells[c.row][c.col].occupied = true;
 			cells[c.row][c.col].currentColor = c.currentColor;
 		}
+		activeCells.clear();
 	}
 	
 	//Sets all of the actions related to key pushes
