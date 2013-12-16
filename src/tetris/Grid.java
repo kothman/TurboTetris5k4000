@@ -4,16 +4,25 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+
+import java.io.File;
+import java.io.IOException;
 
 @SuppressWarnings("serial")
 public class Grid extends JFrame {
@@ -34,6 +43,11 @@ public class Grid extends JFrame {
 	public static final int CELL_PANEL_WIDTH = WIDTH-200, CELL_PANEL_HEIGHT = HEIGHT-100, OFFSET = 10;
 	
 	private static final int[][] ROTATION_MATRIX = {{0,-1},{1, 0}};
+	
+	//Sound stuff
+	File startSound, tockSound;
+	AudioInputStream startAudioIn, tockAudioIn;
+	Clip startClip, tockClip;
 
 	/**
 	*	Creates an empty grid to hold shapes.
@@ -109,6 +123,25 @@ public class Grid extends JFrame {
 				
 			} }, 3, 1, TimeUnit.SECONDS);
 		
+		/*===================Initialize sounds===================*/
+		try {
+			tockSound = new File("wav/tock.wav");
+			tockAudioIn = AudioSystem.getAudioInputStream(tockSound);
+			tockClip = AudioSystem.getClip();
+			tockClip.open(tockAudioIn);
+		}
+		catch (UnsupportedAudioFileException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+		finally {
+			
+		}
 	}
 	
 	/**
@@ -152,7 +185,7 @@ public class Grid extends JFrame {
 		activeCells.clear();
 		int[][] coords = {{4,0},{4,1},{4,2},{4,3}};
 		for (int[] coord : coords) {
-			if (cells[coord[0]][coord[1]].occupied) return false;
+			if (cells[coord[1]][coord[0]].occupied) return false;
 			activeCells.add(new ActiveCell(coord[0], coord[1], c));
 		}
 		activeCells.get(2).isPivot = true;
@@ -163,7 +196,7 @@ public class Grid extends JFrame {
 		activeCells.clear();
 		int[][] coords = {{4,0},{4,1},{4,2},{5,2}};
 		for (int[] coord : coords) {
-			if (cells[coord[0]][coord[1]].occupied) return false;
+			if (cells[coord[1]][coord[0]].occupied) return false;
 			activeCells.add(new ActiveCell(coord[0], coord[1], c));
 		}
 		activeCells.get(2).isPivot = true;
@@ -174,7 +207,7 @@ public class Grid extends JFrame {
 		activeCells.clear();
 		int[][] coords = {{5,0},{5,1},{5,2},{4,2}};
 		for (int[] coord : coords) {
-			if (cells[coord[0]][coord[1]].occupied) return false;
+			if (cells[coord[1]][coord[0]].occupied) return false;
 			activeCells.add(new ActiveCell(coord[0], coord[1], c));
 		}
 		activeCells.get(2).isPivot = true;
@@ -185,7 +218,7 @@ public class Grid extends JFrame {
 		activeCells.clear();
 		int[][] coords = {{3,0},{4,0},{4,1},{5,1}};
 		for (int[] coord : coords) {
-			if (cells[coord[0]][coord[1]].occupied) return false;
+			if (cells[coord[1]][coord[0]].occupied) return false;
 			activeCells.add(new ActiveCell(coord[0], coord[1], c));
 		}
 		activeCells.get(2).isPivot = true;
@@ -196,7 +229,7 @@ public class Grid extends JFrame {
 		activeCells.clear();
 		int[][] coords = {{5,0},{6,0},{5,1},{4,1}};
 		for (int[] coord : coords) {
-			if (cells[coord[0]][coord[1]].occupied) return false;
+			if (cells[coord[1]][coord[0]].occupied) return false;
 			activeCells.add(new ActiveCell(coord[0], coord[1], c));
 		}
 		activeCells.get(2).isPivot = true;
@@ -207,7 +240,7 @@ public class Grid extends JFrame {
 		activeCells.clear();
 		int[][] coords = {{4,0},{5,0},{4,1},{5,1}};
 		for (int[] coord : coords) {
-			if (cells[coord[0]][coord[1]].occupied) return false;
+			if (cells[coord[1]][coord[0]].occupied) return false;
 			activeCells.add(new ActiveCell(coord[0], coord[1], c));
 		}
 		activeCells.get(2).isPivot = true;
@@ -218,7 +251,7 @@ public class Grid extends JFrame {
 		activeCells.clear();
 		int[][] coords = {{4,0},{3,1},{4,1},{5,1}};
 		for (int[] coord : coords) {
-			if (cells[coord[0]][coord[1]].occupied) return false;
+			if (cells[coord[1]][coord[0]].occupied) return false;
 			activeCells.add(new ActiveCell(coord[0], coord[1], c));
 		}
 		activeCells.get(2).isPivot = true;
@@ -359,7 +392,7 @@ public class Grid extends JFrame {
 				cells[row][col].currentColor = Color.WHITE;
 				gridPanel.repaint();
 				try {
-					Thread.sleep(50);
+					Thread.sleep(20);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -395,6 +428,8 @@ public class Grid extends JFrame {
 				endGame();
 		}
 		mainPanel.repaint();
+		tockClip.flush();
+		tockClip.start();
 
 	}
 	
