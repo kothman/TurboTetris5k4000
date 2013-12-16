@@ -21,17 +21,28 @@ public class Grid extends JFrame {
 	private enum shapeType {LINE, L, FLIPL, Z, FLIPZ, SQUARE, PLUSTHING};
 	private shapeType currentShape;
 	private shapeType nextShape;
-	private ArrayList<ActiveCell> activeCells;
+	private ArrayList<ActiveCell> activeCells, nextCells;
 	public static final byte NUM_OF_ROWS = 20, NUM_OF_COLS = 10;
 	private int score;
 	
-	private JPanel mainPanel, gridPanel, scorePanel;
+	private JPanel mainPanel, gridPanel, scorePanel, nextPanel;
 	private ScheduledExecutorService ses;
 	
 	//mainPanel finals
-	private static final int WIDTH = 500, HEIGHT = 650;
+	private static final int WIDTH = 500,
+							 HEIGHT = 650;
 	//cellPanel finals
-	public static final int CELL_PANEL_WIDTH = 300, CELL_PANEL_HEIGHT = 600, OFFSET = 10;
+	public static final int CELL_PANEL_WIDTH = 300, 
+							CELL_PANEL_HEIGHT = 600,
+							OFFSET = 10;
+	public static final int SCORE_PANEL_X = OFFSET*2+CELL_PANEL_WIDTH,
+							SCORE_PANEL_Y = OFFSET,
+							SCORE_PANEL_WIDTH = WIDTH-SCORE_PANEL_X-OFFSET,
+							SCORE_PANEL_HEIGHT = 2*OFFSET;
+	public static final int NEXT_PANEL_X = SCORE_PANEL_X,
+							NEXT_PANEL_Y = SCORE_PANEL_Y+SCORE_PANEL_HEIGHT+OFFSET,
+							NEXT_PANEL_WIDTH = 90,
+							NEXT_PANEL_HEIGHT = 120;
 	
 	private static final int[][] ROTATION_MATRIX = {{0,-1},{1, 0}};
 
@@ -44,6 +55,7 @@ public class Grid extends JFrame {
 		
 		//init vars
 		activeCells = new ArrayList<ActiveCell>();
+		nextCells = new ArrayList<ActiveCell>();
 		score = 0;
 		
 		//populate cells
@@ -88,7 +100,27 @@ public class Grid extends JFrame {
 				g.drawString("Score: "+String.valueOf(score), 0, 10);
 			}
 		};
-		scorePanel.setBounds(2*OFFSET+CELL_PANEL_WIDTH, OFFSET, WIDTH-3*OFFSET-CELL_PANEL_WIDTH, 6*OFFSET);
+		scorePanel.setBounds(2*OFFSET+CELL_PANEL_WIDTH, OFFSET, WIDTH-3*OFFSET-CELL_PANEL_WIDTH, 2*OFFSET);
+		nextPanel = new JPanel() {
+			public void paintComponent(Graphics g) {
+				//Draw each black square with white edges
+				for (int row = 0; row < 4; row++) {
+					for (int col = 0; col < 3; col++) {
+						g.setColor(Color.WHITE);
+						g.drawRect(30*col, 30*row, 30, 30);
+						g.setColor(Color.BLACK);
+						g.fillRect(30*col+1, 30*row+1, 29, 29);
+					}
+				}
+				for (ActiveCell cell: nextCells) {
+					g.setColor(Color.BLACK);
+					g.drawRect(30*cell.col+1, 30*cell.row+1, 28, 28);
+					g.setColor(cell.currentColor);
+					g.fillRect(30*cell.col+2, 30*cell.row+2, 27, 27);
+				}
+			}
+		};
+		nextPanel.setBounds(NEXT_PANEL_X, NEXT_PANEL_Y, NEXT_PANEL_WIDTH, NEXT_PANEL_HEIGHT);
 		
 		/********************** Customize the JFrame **************/
 		setSize(new Dimension(WIDTH,HEIGHT));
@@ -104,10 +136,12 @@ public class Grid extends JFrame {
 		//add Panels
 		mainPanel.add(gridPanel);
 		mainPanel.add(scorePanel);
+		mainPanel.add(nextPanel);
 		add(mainPanel);
 		repaint();
 		gridPanel.repaint();
 		scorePanel.repaint();
+		nextPanel.repaint();
 		setVisible(true);
 		
 		//We should give tock a life here. ScheduledExecutorService
@@ -240,21 +274,39 @@ public class Grid extends JFrame {
 	
 	private void setNextShape(){
 		int i = (int)(Math.random()*7);
+		nextCells.clear();
 		switch(i){
 			case 0:
 				nextShape = shapeType.LINE;
+				nextCells.add(new ActiveCell(0,0,Color.YELLOW));
+				nextCells.add(new ActiveCell(0,1,Color.YELLOW));
+				nextCells.add(new ActiveCell(0,2,Color.YELLOW));
+				nextCells.add(new ActiveCell(0,3,Color.YELLOW));
 				break;
 			case 1:
 				nextShape = shapeType.L;
+				nextCells.add(new ActiveCell(0,0,Color.PINK));
+				nextCells.add(new ActiveCell(0,1,Color.PINK));
+				nextCells.add(new ActiveCell(0,2,Color.PINK));
+				nextCells.add(new ActiveCell(1,2,Color.PINK));
 				break;
 			case 2:
 				nextShape = shapeType.SQUARE;
+				nextCells.add(new ActiveCell(0,0,Color.GREEN));
+				nextCells.add(new ActiveCell(0,1,Color.GREEN));
+				nextCells.add(new ActiveCell(1,0,Color.GREEN));
+				nextCells.add(new ActiveCell(1,1,Color.GREEN));
 				break;
 			case 3:
 				nextShape = shapeType.FLIPL;
+				nextCells.add(new ActiveCell(1,0,Color.BLUE));
+				nextCells.add(new ActiveCell(1,1,Color.BLUE));
+				nextCells.add(new ActiveCell(1,2,Color.BLUE));
+				nextCells.add(new ActiveCell(0,2,Color.BLUE));
 				break;
 			case 4:
 				nextShape = shapeType.FLIPZ;
+				
 				break;
 			case 5:
 				nextShape = shapeType.PLUSTHING;
