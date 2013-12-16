@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -34,7 +33,7 @@ public class Grid extends JFrame {
 	public static final byte NUM_OF_ROWS = 20, NUM_OF_COLS = 10;
 	private int score;
 	
-	private JPanel mainPanel, gridPanel;
+	private JPanel mainPanel, gridPanel, scorePanel;
 	private ScheduledExecutorService ses;
 	
 	//mainPanel finals
@@ -45,9 +44,9 @@ public class Grid extends JFrame {
 	private static final int[][] ROTATION_MATRIX = {{0,-1},{1, 0}};
 	
 	//Sound stuff
-	File startSound, tockSound;
-	AudioInputStream startAudioIn, tockAudioIn;
-	Clip startClip, tockClip;
+	File tockSound;
+	AudioInputStream tockAudioIn;
+	Clip tockClip;
 
 	/**
 	*	Creates an empty grid to hold shapes.
@@ -92,6 +91,13 @@ public class Grid extends JFrame {
 				for(ActiveCell a:activeCells){
 					a.paintComponent(g);
 				}
+			}
+		};
+		scorePanel = new JPanel() {
+			public void paintComponent(Graphics g) {
+				//Draw score
+				g.setColor(Color.BLACK);
+				g.drawString(String.valueOf(score), 10, HEIGHT-90);
 			}
 		};
 		gridPanel.setBounds(OFFSET, OFFSET, CELL_PANEL_WIDTH, CELL_PANEL_HEIGHT);
@@ -344,6 +350,7 @@ public class Grid extends JFrame {
 			cells[0][col] = new Cell();
 		}
 		score++;
+		scorePanel.repaint();
 	}
 	
 
@@ -397,6 +404,13 @@ public class Grid extends JFrame {
 					e.printStackTrace();
 				}
 			}
+		}
+		try {
+			tockAudioIn.close();
+			tockClip.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
