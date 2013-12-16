@@ -5,7 +5,7 @@
   <ul>
     <li>Important:</li>
     <ul>
-      <li>Implement losing [Having problems with spawn returning true when it should be false, please look]</li>
+      <li>Implement losing [Having problems with repainting]</li>
     </ul>
     <li>Not as important:</li>
     <ul>
