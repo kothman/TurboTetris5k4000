@@ -306,13 +306,24 @@ public class Grid extends JFrame {
 				break;
 			case 4:
 				nextShape = shapeType.FLIPZ;
-				
+				nextCells.add(new ActiveCell(0,1,Color.ORANGE));
+				nextCells.add(new ActiveCell(0,2,Color.ORANGE));
+				nextCells.add(new ActiveCell(1,1,Color.ORANGE));
+				nextCells.add(new ActiveCell(1,0,Color.ORANGE));
 				break;
 			case 5:
 				nextShape = shapeType.PLUSTHING;
+				nextCells.add(new ActiveCell(1,0,new Color(0.5f, 0.0f, 1.0f)));
+				nextCells.add(new ActiveCell(1,1,new Color(0.5f, 0.0f, 1.0f)));
+				nextCells.add(new ActiveCell(0,1,new Color(0.5f, 0.0f, 1.0f)));
+				nextCells.add(new ActiveCell(2,1,new Color(0.5f, 0.0f, 1.0f)));
 				break;
 			case 6:
 				nextShape = shapeType.Z;
+				nextCells.add(new ActiveCell(0,0,Color.RED));
+				nextCells.add(new ActiveCell(1,0,Color.RED));
+				nextCells.add(new ActiveCell(1,1,Color.RED));
+				nextCells.add(new ActiveCell(2,1,Color.RED));
 				break;
 			default: //This should never happen. If it does, throw an error
 				try{
