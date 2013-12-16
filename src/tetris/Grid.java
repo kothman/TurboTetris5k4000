@@ -9,19 +9,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
-
-import java.io.File;
-import java.io.IOException;
 
 @SuppressWarnings("serial")
 public class Grid extends JFrame {
@@ -42,11 +34,6 @@ public class Grid extends JFrame {
 	public static final int CELL_PANEL_WIDTH = WIDTH-200, CELL_PANEL_HEIGHT = HEIGHT-100, OFFSET = 10;
 	
 	private static final int[][] ROTATION_MATRIX = {{0,-1},{1, 0}};
-	
-	//Sound stuff
-	File tockSound;
-	AudioInputStream tockAudioIn;
-	Clip tockClip;
 
 	/**
 	*	Creates an empty grid to hold shapes.
@@ -93,14 +80,15 @@ public class Grid extends JFrame {
 				}
 			}
 		};
+		gridPanel.setBounds(OFFSET, OFFSET, CELL_PANEL_WIDTH, CELL_PANEL_HEIGHT);
 		scorePanel = new JPanel() {
 			public void paintComponent(Graphics g) {
 				//Draw score
 				g.setColor(Color.BLACK);
-				g.drawString(String.valueOf(score), 10, HEIGHT-90);
+				g.drawString(String.valueOf(score), 0, 0);
 			}
 		};
-		gridPanel.setBounds(OFFSET, OFFSET, CELL_PANEL_WIDTH, CELL_PANEL_HEIGHT);
+		scorePanel.setBounds(OFFSET, 2*OFFSET+CELL_PANEL_HEIGHT, CELL_PANEL_WIDTH, HEIGHT-CELL_PANEL_HEIGHT-3*OFFSET);
 		
 		/********************** Customize the JFrame **************/
 		setSize(new Dimension(WIDTH,HEIGHT));
@@ -129,25 +117,7 @@ public class Grid extends JFrame {
 				
 			} }, 3, 1, TimeUnit.SECONDS);
 		
-		/*===================Initialize sounds===================*/
-		try {
-			tockSound = new File("wav/tock.wav");
-			tockAudioIn = AudioSystem.getAudioInputStream(tockSound);
-			tockClip = AudioSystem.getClip();
-			tockClip.open(tockAudioIn);
-		}
-		catch (UnsupportedAudioFileException e) {
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
-		finally {
-			
-		}
+		SoundEffect.init();
 	}
 	
 	/**
@@ -390,7 +360,6 @@ public class Grid extends JFrame {
 	}
 	
 	//Stop tocking, progressively fill up the grid with white blocks
-
 	private void endGame() {
 		ses.shutdown();
 		System.out.println("You lose");
@@ -399,18 +368,11 @@ public class Grid extends JFrame {
 				cells[row][col].currentColor = Color.WHITE;
 				gridPanel.repaint();
 				try {
-					Thread.sleep(50);
+					Thread.sleep(20);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
-		}
-		try {
-			tockAudioIn.close();
-			tockClip.close();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 	
@@ -442,10 +404,7 @@ public class Grid extends JFrame {
 				endGame();
 		}
 		mainPanel.repaint();
-		tockClip.stop();
-		tockClip.setFramePosition(0);
-		tockClip.start();
-
+		SoundEffect.TOCK.play();
 	}
 	
 	//Takes active cells and puts them into cells[][]
