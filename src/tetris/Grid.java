@@ -4,25 +4,16 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
-
-import java.io.File;
-import java.io.IOException;
 
 @SuppressWarnings("serial")
 public class Grid extends JFrame {
@@ -44,10 +35,6 @@ public class Grid extends JFrame {
 	
 	private static final int[][] ROTATION_MATRIX = {{0,-1},{1, 0}};
 	
-	//Sound stuff
-	File startSound, tockSound;
-	AudioInputStream startAudioIn, tockAudioIn;
-	Clip startClip, tockClip;
 
 	/**
 	*	Creates an empty grid to hold shapes.
@@ -122,28 +109,7 @@ public class Grid extends JFrame {
 				tock();
 				
 			} }, 3, 1, TimeUnit.SECONDS);
-		
-		/*===================Initialize sounds===================*/
-		try {
-			tockSound = new File("wav/tock.wav");
-			tockAudioIn = AudioSystem.getAudioInputStream(tockSound);
-			tockClip = AudioSystem.getClip();
-			tockClip.open(tockAudioIn);
-		}
-		catch (UnsupportedAudioFileException e) {
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
-		finally {
-			
-		}
 	}
-	
 	/**
 	 * Spawns the next shape.  Returns false if there is no room left.
 	 */
@@ -428,8 +394,6 @@ public class Grid extends JFrame {
 				endGame();
 		}
 		mainPanel.repaint();
-		tockClip.flush();
-		tockClip.start();
 
 	}
 	
